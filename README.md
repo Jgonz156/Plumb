@@ -117,7 +117,7 @@ class G {
         this.h = x
     }
 }
-i = new G("this is a good sentence")
+var i = new G("this is a good sentence")
 console.log(a, b, c)
 console.log(e(d))
 console.log(i.h)
