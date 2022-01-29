@@ -52,6 +52,7 @@ Below is an in-depth view of Plumb with a comparison to equivalent code in JavaS
 |Inequality|`!=`|Boolean, Integers, Rationals|
 |Logical AND|`and`|Boolean|
 |Logical OR|`or`|Boolean|
+
 Note: Prototypes can use the operator (`OP`) key word to adapt functionality
 
 ### Unary Operators
@@ -61,6 +62,7 @@ Note: Prototypes can use the operator (`OP`) key word to adapt functionality
 |Negation|`-`|Integers, Rationals|
 |Incrementation|`++`|Integers|
 |Decrementation|`--`|Integers|
+
 Note: Prototypes can use the operator (`OP`) key word to adapt functionality
 
 ### Pipeline Operators
