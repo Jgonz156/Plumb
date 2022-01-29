@@ -24,6 +24,7 @@ Below is an in-depth view of Plumb with a comparison to equivalent code in JavaS
 |else||
 |for||
 |while||
+|print||
 
 ### Primitive Types
 |Type|Values|JavaScript|
