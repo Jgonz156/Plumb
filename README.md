@@ -72,10 +72,11 @@ Note: Prototypes can use the operator (`OP`) key word to adapt functionality
 |Drain|Prototype `-#->` target|Similar to dot notation, takes a object and takes a copy of the specified attribute "#" and pushes it into the next operation on a pipe|
 
 <table>
-    <tr> <th> Plumb </th> <th> JavaScript </th> <tr>
+    <tr> <th> Plumb </th> <th> JavaScript </th> </tr>
     <tr> 
         <td>
-            ``` 
+
+            ```
             Defintions {
                 INT a = 7+2-(-3+4)
                 INT b = 8*4
@@ -100,6 +101,7 @@ Note: Prototypes can use the operator (`OP`) key word to adapt functionality
             ```
         </td> 
         <td>
+
             ```javascript
             var a = 7+2-(-3+4)
             var b = 8*4
@@ -119,8 +121,9 @@ Note: Prototypes can use the operator (`OP`) key word to adapt functionality
             console.log(e(d))
             console.log(i.h)
             ```
+
         </td>
-    <tr>
+    </tr>
 </table>
 
 ## Plumb vs JavaScript Examples
