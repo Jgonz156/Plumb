@@ -72,58 +72,59 @@ Note: Prototypes can use the operator (`OP`) key word to adapt functionality
 |Drain|Prototype `-#->` target|Similar to dot notation, takes a object and takes a copy of the specified attribute "#" and pushes it into the next operation on a pipe|
 
 <table>
-    <tr> <th> Plumb </th> <th> JavaScript </th> </tr>
-    <tr> 
-        <td>
+<tr> <th> Plumb </th> <th> JavaScript </th> </tr>
+<tr>
+<td>
 
-            ```
-            Defintions {
-                INT a = 7+2-(-3+4)
-                INT b = 8*4
-                RAT c = 7/2
-                STR d = "ka"
-                STR FUNC e (f) {
-                    return f + "boom"
-                }
-                PROTO G {
-                    ATR STR h
-                    G(x){
-                        self.h = h
-                    }
-                }
-                G i = G("this is a good sentence")
-            }
-            Pipelines {
-                a, b, c --> print
-                d --> e --> print
-                i -h-> print 
-            }
-            ```
-        </td> 
-        <td>
+```
+Defintions {
+    INT a = 7+2-(-3+4)
+    INT b = 8*4
+    RAT c = 7/2
+    STR d = "ka"
+    STR FUNC e (f) {
+        return f + "boom"
+    }
+    PROTO G {
+        ATR STR h
+        G(x){
+            self.h = h
+        }
+    }
+    G i = G("this is a good sentence")
+}
+Pipelines {
+    a, b, c --> print
+    d --> e --> print
+    i -h-> print 
+}
+```
 
-            ```javascript
-            var a = 7+2-(-3+4)
-            var b = 8*4
-            var c = 7/2
-            var d = "ka"
-            function e (f) {
-                return f + "boom"
-            }
-            class G {
-                h
-                constructor(x){
-                    this.h = x
-                }
-            }
-            i = new G("this is a good sentence")
-            console.log(a, b, c)
-            console.log(e(d))
-            console.log(i.h)
-            ```
+</td> 
+<td>
 
-        </td>
-    </tr>
+```javascript
+var a = 7+2-(-3+4)
+var b = 8*4
+var c = 7/2
+var d = "ka"
+function e (f) {
+    return f + "boom"
+}
+class G {
+    h
+    constructor(x){
+        this.h = x
+    }
+}
+i = new G("this is a good sentence")
+console.log(a, b, c)
+console.log(e(d))
+console.log(i.h)
+```
+
+</td>
+</tr>
 </table>
 
 ## Plumb vs JavaScript Examples
