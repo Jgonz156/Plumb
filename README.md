@@ -17,14 +17,15 @@ Below is an in-depth view of Plumb with a comparison to equivalent code in JavaS
 ### Keywords
 |Keyword|Description|
 |-------|-----------|
-|Definitons||
-|Pipelines||
+|Definitons|Used to specify the next block for holding statements and expressions|
+|Pipelines|Used to specify the next block for holding pipes|
 |return||
 |if||
 |else||
 |for||
 |while||
-|print||
+|print|Used to output to the command line from a pipe|
+|OP|Used for overloading operator functionality into prototypes|
 
 ### Primitive Types
 |Type|Values|JavaScript|
