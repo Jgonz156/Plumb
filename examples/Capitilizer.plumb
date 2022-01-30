@@ -1,9 +1,11 @@
 ::
-This is a small program that takes inputs off the command line and capitilizes them
+This is a small program that takes inputs off the command line, capitilizes them, and prints them
 ::
 Definitions {
-
+    STR FUNC capitilize(STR word) {
+        return PLUMB.STR.uppercase(word)
+    }
 }
 Pipelines {
-
+    INPUT --<( -(STR)-> capitilize --> print
 }
