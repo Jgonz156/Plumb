@@ -17,15 +17,15 @@ Below is an in-depth view of Plumb with a comparison to equivalent code in JavaS
 ### Keywords
 |Keyword|Description|
 |-------|-----------|
-|Definitons|Used to specify the next block for holding statements and expressions|
-|Pipelines|Used to specify the next block for holding pipes|
-|return||
-|if||
-|else||
-|for||
-|while||
-|print|Used to output to the command line from a pipe|
-|OP|Used for overloading operator functionality into prototypes|
+|`Definitons`|Used to specify the next block for holding statements and expressions|
+|`Pipelines`|Used to specify the next block for holding pipes|
+|`return`|Used to specify when a function has reached a terminal state in its operation and what value to recieve from it in a call|
+|`if`|Used to specify the next block with a conditonal|
+|`else`|Used after an `if` specified block, `else` is used to specify the next block as the previous `if`'s false condition path|
+|`for`|Used to specify how many finite loops happen over a specified block|
+|`while`|Used to specify a halt condition over a specified block with an unknown number of loops|
+|`print`|Used to output to the command line from a pipe|
+|`OP`|Used for overloading operator functionality into prototypes|
 
 ### Primitive Types
 |Type|Values|JavaScript|
@@ -41,6 +41,7 @@ Below is an in-depth view of Plumb with a comparison to equivalent code in JavaS
 ### Binary Operators
 |Operator|Symbol|Avaliable Types|
 |--------|------|---------------|
+|Assignment|`<--`|Boolean, Integers, Rationals, String, Prototype Instance|
 |Addition|`+`|Integers, Rationals, String|
 |Subtraction|`-`|Integers, Rationals|
 |Multplication|`*`|Integers, Rationals, String|
@@ -80,20 +81,20 @@ Note: Prototypes can use the operator (`OP`) key word to adapt functionality
 
 ```
 Defintions {
-    INT a = 7+2-(-3+4)
-    INT b = 8*4
-    RAT c = 7/2
-    STR d = "ka"
+    INT a <-- 7+2-(-3+4)
+    INT b <-- 8*4
+    RAT c <-- 7/2
+    STR d <-- "ka"
     STR FUNC e (f) {
         return f + "boom"
     }
     PROTO G {
         ATR STR h
         G(x){
-            self.h = h
+            self.h <-- h
         }
     }
-    G i = G("this is a good sentence")
+    G i <-- G("this is a good sentence")
 }
 Pipelines {
     a, b, c --> print
