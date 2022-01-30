@@ -42,8 +42,8 @@ Below is an in-depth view of Plumb with a comparison to equivalent code in JavaS
 ### Data Structures
 |Structure|Syntax|JavaScript|
 |---|---|---|
-|Lists|`||` a `,` b `,` c `||`|`[` a `,` b `,` c `]`|
-|Maps|`<<` a `:` x `,` b `:` y `>>`|`{` a `:` x `,` b `:` y `}`|
+|Lists| `|| a , b , c ||` | `[ a , b , c ]` |
+|Maps| `<< a : x , b : y >>` | `{ a : x , b : y }` |
 
 ### Binary Operators
 |Operator|Symbol|Avaliable Types|
@@ -85,7 +85,7 @@ Note: Prototypes can use the operator (`OP`) key word to adapt functionality
 ### Functions
 |Name|Syntax|Description|
 |---|---|---|
-|Caster|`type(` to_be_casted `,` cast_type `)`|Takes any instance of any type and attempts to cast it to another|
+|Caster| `type( to_be_casted , cast_type )` |Takes any instance of any type and attempts to cast it to another|
 
 <table>
 <tr> <th> Plumb </th> <th> JavaScript </th> </tr>
