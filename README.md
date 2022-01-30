@@ -14,6 +14,10 @@ Below is an in-depth view of Plumb with a comparison to equivalent code in JavaS
 
 ## Built-in Overview
 
+### Comments
+`:: psuedocode goes here ::`
+Disclaimer: There are no single line comments in Plumb, the default comment is multi-line
+
 ### Keywords
 |Keyword|Description|
 |-------|-----------|
