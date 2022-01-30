@@ -42,7 +42,7 @@ Below is an in-depth view of Plumb with a comparison to equivalent code in JavaS
 ### Data Structures
 |Structure|Syntax|JavaScript|
 |---|---|---|
-|Lists| `|| a , b , c ||` | `[ a , b , c ]` |
+|Lists| `\|\| a , b , c \|\|` | `[ a , b , c ]` |
 |Maps| `<< a : x , b : y >>` | `{ a : x , b : y }` |
 
 ### Binary Operators
