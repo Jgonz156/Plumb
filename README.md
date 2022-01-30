@@ -166,6 +166,6 @@ Pipelines {
 }
 ```
 JavaScript
-```
+```javascript
 console.log("Hello World!")
 ```
