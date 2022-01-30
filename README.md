@@ -16,6 +16,7 @@ Below is an in-depth view of Plumb with a comparison to equivalent code in JavaS
 
 ### Comments
 `:: psuedocode goes here ::`
+They can go anywhere in the language, including in between, and in, statements and pipes!
 Disclaimer: There are no single line comments in Plumb, the default comment is multi-line
 
 ### Keywords

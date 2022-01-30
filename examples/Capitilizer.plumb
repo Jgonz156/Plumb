@@ -1,0 +1,9 @@
+::
+This is a small program that takes inputs off the command line and capitilizes them
+::
+Definitions {
+
+}
+Pipelines {
+
+}
