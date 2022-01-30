@@ -26,8 +26,9 @@ Below is an in-depth view of Plumb with a comparison to equivalent code in JavaS
 |`while`|Used to specify a halt condition over a specified block with an unknown number of loops|
 |`print`|Used to output to the command line from a pipe|
 |`OP`|Used for overloading operator functionality into prototypes|
+|`INPUT`|Used to represent commandline arguments, as a plumb list, in the `Pipelines` block|
 
-### Primitive Types
+### Data Types
 |Type|Values|JavaScript|
 |----|------|----------|
 |Does not exist `DNE`|`empty`|Null `null`|
@@ -37,6 +38,12 @@ Below is an in-depth view of Plumb with a comparison to equivalent code in JavaS
 |String `STR`|` `|String ` `|
 |Function `FUNC`|` `|Object\function ` `|
 |Prototype `PROTO`|` `|Class ` `|
+
+### Data Structures
+|Structure|Syntax|JavaScript|
+|---|---|---|
+|Lists|`||` a `,` b `,` c `||`|`[` a `,` b `,` c `]`|
+|Maps|`<<` a `:` x `,` b `:` y `>>`|`{` a `:` x `,` b `:` y `}`|
 
 ### Binary Operators
 |Operator|Symbol|Avaliable Types|
@@ -71,8 +78,14 @@ Note: Prototypes can use the operator (`OP`) key word to adapt functionality
 ### Pipeline Operators
 |Operator|Syntax|Description|
 |----|------|----------|
-|Injection|a, b, c, ... `-->` target|Takes an arbitrary number of parameters on the left and pushes them into the next operation on a pipe|
+|Injection|a, b, c, ... `-->` target|Takes an arbitrary number of parameters on the left and, from left to right, pushes them into the next operation on a pipe|
 |Drain|Prototype `-#->` target|Similar to dot notation, takes a object and takes a copy of the specified attribute "#" and pushes it into the next operation on a pipe|
+|Caster|a, b, c, ... `-(` type `)->` target|Takes an arbitrary number of parameters on the left and, from left to right, casts them to the specified castable type, or castable protocol, and pushes them into the next operation|
+
+### Functions
+|Name|Syntax|Description|
+|---|---|---|
+|Caster|`type(` to_be_casted `,` cast_type `)`|Takes any instance of any type and attempts to cast it to another|
 
 <table>
 <tr> <th> Plumb </th> <th> JavaScript </th> </tr>

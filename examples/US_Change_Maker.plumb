@@ -1,0 +1,19 @@
+:: 
+This program takes an input off the commandline, casts it to an INT type,
+and denominates it into the smallest number of US coins.
+::
+Definitions {
+    ||INT|| FUNC denominate(INT total) {
+        INT current_total <-- total
+        INT quarters <-- total % 25
+        current_total <-- total - (25 * quarters)
+        INT dimes <-- total % 10
+        current_total <-- total - (10 * dimes)
+        INT nickels <-- total % 5
+        current_total <-- total - (5 * nickels)
+        return ||quarters, dimes, nickels, current_total||
+    }
+}
+Pipelines {
+    INPUT -1-> -(INT)-> denominate --> print
+}
