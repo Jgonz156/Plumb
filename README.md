@@ -38,11 +38,11 @@ Disclaimer: There are no single line comments in Plumb, the default comment is m
 |----|------|----------|
 |Does not exist `DNE`|`empty`|Null `null`|
 |Boolean `BOOL`|`true`, `false`|Boolean `true` `false`|
-|Integers `INT`|` `|BigInt ` `|
-|Rationals `RAT`|` `|Number ` `|
-|String `STR`|` `|String ` `|
-|Function `FUNC`|` `|Object\function ` `|
-|Prototype `PROTO`|` `|Class ` `|
+|Integers `INT`|`12`, `79`, `99999`|BigInt `1223345n`|
+|Rationals `RAT`|`3.97385`, `7895.2734`|Number `99465.213`|
+|String `STR`|`carrot`, `bob`|String `phrase`|
+|Function `FUNC`| See code examples |Object\function|
+|Prototype `PROTO`| See code examples |Class|
 
 ### Data Structures
 |Structure|Syntax|JavaScript|
