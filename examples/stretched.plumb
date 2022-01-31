@@ -1,9 +1,16 @@
 ::
-
+This program takes an input word off the commandline and stretches it
+proportional to its character length
 ::
 Definitions {
     STR FUNC stretched(STR word) {
-
+        INT counter <-- 0
+        STR stretched_word <-- ""
+        while(counter < STR.c_length(word)) {
+            stretched_word + (word[counter]*(counter+1) )
+            counter++
+        }
+        return stretched_word
     } 
 }
 Pipelines {

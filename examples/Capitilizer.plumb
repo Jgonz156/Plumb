@@ -3,7 +3,7 @@ This is a small program that takes inputs off the command line, capitilizes them
 ::
 Definitions {
     STR FUNC capitilize(STR word) {
-        return PLUMB.STR.uppercase(word)
+        return STR.uppercase(word)
     }
 }
 Pipelines {
