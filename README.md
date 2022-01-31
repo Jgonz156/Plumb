@@ -40,7 +40,7 @@ Disclaimer: There are no single line comments in Plumb, the default comment is m
 |Boolean `BOOL`|`true`, `false`|Boolean `true` `false`|
 |Integers `INT`|`12`, `79`, `99999`|BigInt `1223345n`|
 |Rationals `RAT`|`3.97385`, `7895.2734`|Number `99465.213`|
-|String `STR`|`carrot`, `bob`|String `phrase`|
+|String `STR`|`"carrot"`, `"bob"`|String `"phrase"`|
 |Function `FUNC`| See code examples |Object\function|
 |Prototype `PROTO`| See code examples |Class|
 
@@ -91,10 +91,12 @@ Note: Prototypes can use the operator (`OP`) key word to adapt functionality
 |Factory|a, b, c, ... `--<(` pipe|Takes an arbitrary number of instances on the left and, for each instance, will create a new pipe that is a duplication of what comes after this operator|
 
 ### Functions
-|Name|Syntax|Description|
-|---|---|---|
-|Caster| `type( to_be_casted , cast_type )` |Takes any instance of any type and attempts to cast it to another|
-|Printer| `print( a, b, c, ... )` |Takes any amount of instances of any type and attempts to cast print them to the commandline|
+|Type|Name|Syntax|Description|
+|---|---|---|---|
+|DNE|Caster| `type( to_be_casted , cast_type )` |Takes any instance of any type and attempts to cast it to another|
+|DNE|Printer| `print( a, b, c, ... )` |Takes any amount of instances of any type and attempts to cast print them to the commandline|
+|STR|Uppercase|`STR.upper( string_to_uppercase )`|Takes a single String instance and attempts to replace all lowercase characters with their capitilized counterparts|
+|STR|Character Count|`STR.c_length( string_to_measure )`||
 
 <table>
 <tr> <th> Plumb </th> <th> JavaScript </th> </tr>
