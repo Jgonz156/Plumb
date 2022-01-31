@@ -1,0 +1,13 @@
+::
+This program makes use of the "factory" operator to quickly create parallel pipes for
+preforming arithmetic over an array of rationals
+::
+Definitions {
+    ||RAT|| to_be_divided <-- || 23.7, 8.0, 983, 74.07, 96.6, 12.983 ||
+    RAT FUNC divide_by_3(RAT x){
+        return x / 3
+    }
+}
+Pipelines {
+    to_be_divided --<( --> divide_by_3 --> print
+}
