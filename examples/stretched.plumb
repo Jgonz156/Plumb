@@ -1,0 +1,11 @@
+::
+
+::
+Definitions {
+    STR FUNC stretched(STR word) {
+
+    } 
+}
+Pipelines {
+    INPUT -1-> -(STR)-> stretched --> print
+}

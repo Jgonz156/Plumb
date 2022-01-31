@@ -1,0 +1,15 @@
+::
+This program prints successive powers of a specified base up to some limit pulled from the commandline arguments
+::
+Definitions {
+    INT FUNC powers(INT base, INT limit) {
+        INT value <-- 1
+        while(value <= limit){
+            print(value)
+            value <-- value * base
+        }
+    }
+}
+Pipelines {
+    INPUT, INPUT -1-2-> -(INT)-> powers
+}

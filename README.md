@@ -29,7 +29,7 @@ Disclaimer: There are no single line comments in Plumb, the default comment is m
 |`else`|Used after an `if` specified block, `else` is used to specify the next block as the previous `if`'s false condition path|
 |`for`|Used to specify how many finite loops happen over a specified block|
 |`while`|Used to specify a halt condition over a specified block with an unknown number of loops|
-|`print`|Used to output to the command line from a pipe|
+|`print`|Used to output to the command line|
 |`OP`|Used for overloading operator functionality into prototypes|
 |`INPUT`|Used to represent commandline arguments, as a plumb list, in the `Pipelines` block|
 
@@ -58,6 +58,7 @@ Disclaimer: There are no single line comments in Plumb, the default comment is m
 |Subtraction|`-`|Integers, Rationals|
 |Multplication|`*`|Integers, Rationals, String|
 |Division|`/`|Integers, Rationals|
+|Exponentiation|`^`|Integers, Rationals|
 |Modulus|`%`|Integers, Rationals|
 |Less Than|`<`|Integers, Rationals|
 |Less Than or equal|`<=`|Integers, Rationals|
@@ -84,7 +85,7 @@ Note: Prototypes can use the operator (`OP`) key word to adapt functionality
 |Operator|Syntax|Description|
 |----|------|----------|
 |Injection|a, b, c, ... `-->` target|Takes an arbitrary number of instances on the left and, from left to right, pushes them into the next operation on a pipe|
-|Drain|Prototype `-#->` target|Similar to dot notation, takes a object and takes a copy of the specified attribute "#" and pushes it into the next operation on a pipe|
+|Drain|Prototype `-#-#-...->` target|Similar to dot notation, takes a object and takes a copy of the specified attribute "#" and pushes it into the next operation on a pipe. If there are multiple objects to the left of the drain, successively add more attributes to match the number of instances at which point each attribute will specify what it being drained from its corrosponding instance|
 |Caster|a, b, c, ... `-(` type `)->` target|Takes an arbitrary number of instances on the left and, from left to right, casts them to the specified castable type, or castable protocol, and pushes them into the next operation|
 |Factory|a, b, c, ... `--<(` pipe|Takes an arbitrary number of instances on the left and, for each instance, will create a new pipe that is a duplication of what comes after this operator|
 
@@ -92,6 +93,7 @@ Note: Prototypes can use the operator (`OP`) key word to adapt functionality
 |Name|Syntax|Description|
 |---|---|---|
 |Caster| `type( to_be_casted , cast_type )` |Takes any instance of any type and attempts to cast it to another|
+|Printer| `print( a, b, c, ... )` |Takes any amount of instances of any type and attempts to cast print them to the commandline|
 
 <table>
 <tr> <th> Plumb </th> <th> JavaScript </th> </tr>
