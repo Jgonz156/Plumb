@@ -78,6 +78,7 @@ Note: Prototypes can use the operator (`OP`) key word to adapt functionality
 |Negation|`-`|Integers, Rationals|
 |Incrementation|`++`|Integers|
 |Decrementation|`--`|Integers|
+|Indexer|`[]`|String, Lists|
 
 Note: Prototypes can use the operator (`OP`) key word to adapt functionality
 
