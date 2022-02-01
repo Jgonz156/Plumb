@@ -157,7 +157,7 @@ class G {
     }
 }
 var i = new G("this is a good sentence")
-var j = [ 1, 1.02, "bob", i, true, empty ]
+var j = [ 1, 1.02, "bob", i, true, null ]
 j.push(d)
 var k = [ 1, 2, 5, 7, 73, 45 ]
 k.splice(k.indexOf(7), 1)
