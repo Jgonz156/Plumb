@@ -54,8 +54,8 @@ Disclaimer: There are no single line comments in Plumb, the default comment is m
 |Operator|Symbol|Avaliable Types|
 |--------|------|---------------|
 |Assignment|`<--`|Boolean, Integers, Rationals, String, Prototype Instance|
-|Addition|`+`|Integers, Rationals, String|
-|Subtraction|`-`|Integers, Rationals|
+|Addition|`+`|Integers, Rationals, String, Lists, Maps|
+|Subtraction|`-`|Integers, Rationals, Lists, Maps|
 |Multplication|`*`|Integers, Rationals, String|
 |Division|`/`|Integers, Rationals|
 |Exponentiation|`^`|Integers, Rationals|
@@ -88,15 +88,15 @@ Note: Prototypes can use the operator (`OP`) key word to adapt functionality
 |Injection|a, b, c, ... `-->` target|Takes an arbitrary number of instances on the left and, from left to right, pushes them into the next operation on a pipe|
 |Drain|Prototype `-#-#-...->` target|Similar to dot notation, takes a object and takes a copy of the specified attribute "#" and pushes it into the next operation on a pipe. If there are multiple objects to the left of the drain, successively add more attributes to match the number of instances at which point each attribute will specify what it being drained from its corrosponding instance|
 |Caster|a, b, c, ... `-(` type `)->` target|Takes an arbitrary number of instances on the left and, from left to right, casts them to the specified castable type, or castable protocol, and pushes them into the next operation|
-|Factory|a, b, c, ... `--<(` pipe|Takes an arbitrary number of instances on the left and, for each instance, will create a new pipe that is a duplication of what comes after this operator|
+|Factory|a, b, c, ... `--<(` pipe|Takes an arbitrary number of instances on the left and, for each instance, will create a new pipe for that instance to be pushed into that is a duplication of the rest of the pipe that comes after this operator|
 
 ### Functions
 |Type|Name|Syntax|Description|
 |---|---|---|---|
 |DNE|Caster| `type( to_be_casted , cast_type )` |Takes any instance of any type and attempts to cast it to another|
 |DNE|Printer| `print( a, b, c, ... )` |Takes any amount of instances of any type and attempts to cast print them to the commandline|
-|STR|Uppercase|`STR.upper( string_to_uppercase )`|Takes a single String instance and attempts to replace all lowercase characters with their capitilized counterparts|
-|STR|Character Count|`STR.c_length( string_to_measure )`||
+|STR|Uppercase|`STR.uppercase( string_to_uppercase )`|Takes a single String instance and attempts to replace all lowercase characters with their capitilized counterparts|
+|STR|Character Count|`STR.c_length( string_to_measure )`|Takes a single String instance and returns the number of, unicode safe, characters in it|
 
 <table>
 <tr> <th> Plumb </th> <th> JavaScript </th> </tr>
@@ -119,11 +119,23 @@ Defintions {
         }
     }
     G i <-- G("this is a good sentence")
+    ||DNE|| j <-- || 1, 1.02, "bob", i, true, empty ||
+    j + d
+    ||INT|| k <-- || 1, 2, 5, 7, 73, 45 ||
+    k - 7
+    <<DNE>> l <-- << "name" : "lasagna" , "color" : G("red"), "height" : 12 >> 
+    l + << "awesome?" : true >>
+    <<INT>> m <-- << "horsepower" : 1200, "price" : 270000 , "model_number" : 79 >> 
+    m - "price"
 }
 Pipelines {
     a, b, c --> print
     d --> e --> print
-    i -h-> print 
+    i -h-> print
+    j --> print
+    k --<( --> print
+    l --> print
+    m --<( --> print
 }
 ```
 
@@ -145,9 +157,25 @@ class G {
     }
 }
 var i = new G("this is a good sentence")
+var j = [ 1, 1.02, "bob", i, true, empty ]
+j.push(d)
+var k = [ 1, 2, 5, 7, 73, 45 ]
+k.splice(k.indexOf(7), 1)
+var l = { name : "lasagna" , color : new G("red"), height : 12 }
+Object.assign(l, { awesome : true })
+var m = { "horsepower" : 1200, "price" : 270000 , "model_number" : 79 }
+delete m.price
 console.log(a, b, c)
 console.log(e(d))
 console.log(i.h)
+console.log(j)
+for ( x in k ){
+    console.log(x)
+}
+console.log(l)
+for ( (x, y) in m ){
+    console.log(x, y)
+}
 ```
 
 </td>
