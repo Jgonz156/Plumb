@@ -32,6 +32,14 @@ Disclaimer: There are no single line comments in Plumb, the default comment is m
 |`print`|Used to output to the command line|
 |`OP`|Used for overloading operator functionality into prototypes|
 |`INPUT`|Used to represent commandline arguments, as a plumb list, in the `Pipelines` block|
+|`DNE`|Type used to represent no, or any, type|
+|`BOOL`|Type used to represent booleans|
+|`INT`|Type used to represent integers|
+|`RAT`|Type used to represent rationals|
+|`STR`|Type used to represent strings|
+|`FUNC`|Type used to represent functions|
+|`PROTO`|Type used to represent prototypes|
+|`ATR`|Type used to represent prototype attributes|
 
 ### Data Types
 |Type|Values|JavaScript|
