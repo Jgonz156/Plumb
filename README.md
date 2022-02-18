@@ -58,35 +58,31 @@ Disclaimer: There are no single line comments in Plumb, the default comment is m
 |Lists| `\|\| a , b , c \|\|` | `[ a , b , c ]` |
 |Maps| `<< a : x , b : y >>` | `{ a : x , b : y }` |
 
-### Binary Operators
-|Operator|Symbol|Available Types|
-|--------|------|---------------|
-|Assignment|`<--`|Boolean, Integers, Rationals, String, Prototype Instance|
-|Addition|`+`|Integers, Rationals, String, Lists, Maps|
-|Subtraction|`-`|Integers, Rationals, Lists, Maps|
-|Multiplication|`*`|Integers, Rationals, String|
-|Division|`/`|Integers, Rationals|
-|Exponentiation|`^`|Integers, Rationals|
-|Modulus|`%`|Integers, Rationals|
-|Less Than|`<`|Integers, Rationals|
-|Less Than or equal|`<=`|Integers, Rationals|
-|Greater Than|`>`|Integers, Rationals|
-|Greater Than or equal|`>=`|Integers, Rationals|
-|Equality|`==`|Boolean, Integers, Rationals|
-|Inequality|`!=`|Boolean, Integers, Rationals|
-|Logical AND|`and`|Boolean|
-|Logical OR|`or`|Boolean|
-
-Note: Prototypes can use the operator (`OP`) key word to adapt functionality
-
-### Unary Operators
-|Operator|Symbol|Available Types|
-|----|------|----------|
-|Negation|`!`|Boolean|
-|Negation|`-`|Integers, Rationals|
-|Incrementor|`++`|Integers|
-|Decrementor|`--`|Integers|
-|Indexer|`[]`|String, Lists|
+### Operators and Precedence 
+|Operator|Symbol|Operational Types|Precedence|Associativity|
+|--------|------|-----------------|--------|------|
+|Attributor|`.`|Functions|1|L to R|
+|Indexer|`[]`|Functions|1| \| |
+|Call|`()`|Functions|1| \| |
+|Negation|`!`|Boolean|2|R to L|
+|Negation|`-`|Integers, Rationals|2| \| |
+|Multiplication|`*`|Integers, Rationals, String|3| L to R |
+|Division|`/`|Integers, Rationals|3| \| |
+|Modulus|`%`|Integers, Rationals|3| \| |
+|Addition|`+`|Integers, Rationals, String|4| \| |
+|Subtraction|`-`|Integers, Rationals|4| \| |
+|Exponentiation|`^`|Integers, Rationals|5| R to L |
+|Less Than|`<`|Integers, Rationals|6|None|
+|Less Than or equal|`<=`|Integers, Rationals|6| \| |
+|Greater Than|`>`|Integers, Rationals|6| \| |
+|Greater Than or equal|`>=`|Integers, Rationals|6| \| |
+|Equality|`==`|Boolean, Integers, Rationals|7| \| |
+|Inequality|`!=`|Boolean, Integers, Rationals|7| \| |
+|Logical AND|`and`|Boolean|8| \| |
+|Logical OR|`or`|Boolean|9| \| |
+|Assignment by Expression|`<==`|Boolean, Integers, Rationals, String, Prototype Instance|10|R to L|
+|Assignment by Addition|`<++`|Boolean, Integers, Rationals, String, Prototype Instance|10| \| |
+|Assignment by Subtraction|`<--`|Boolean, Integers, Rationals, String, Prototype Instance|10| \| |
 
 Note: Prototypes can use the operator (`OP`) key word to adapt functionality
 
@@ -132,9 +128,9 @@ Definitions {
     ||INT|| k <-- || 1, 2, 5, 7, 73, 45 ||
     k - 7
     <<DNE>> l <-- << "name" : "lasagna" , "color" : G("red"), "height" : 12 >> 
-    l + << "awesome?" : true >>
+    l.join( << "awesome?" : true >> )
     <<INT>> m <-- << "horsepower" : 1200, "price" : 270000 , "model_number" : 79 >> 
-    m - "price"
+    m.remove("price")
 }
 Pipelines {
     a, b, c --> print
