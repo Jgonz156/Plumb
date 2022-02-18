@@ -83,6 +83,9 @@ Disclaimer: There are no single line comments in Plumb, the default comment is m
 |Assignment by Expression|`<==`|Boolean, Integers, Rationals, String, Prototype Instance|10|R to L|
 |Assignment by Addition|`<++`|Boolean, Integers, Rationals, String, Prototype Instance|10| \| |
 |Assignment by Subtraction|`<--`|Boolean, Integers, Rationals, String, Prototype Instance|10| \| |
+|Assignment by Multiplication|`<**`|Boolean, Integers, Rationals, String, Prototype Instance|10| \| |
+|Assignment by Division|`<//`|Boolean, Integers, Rationals, String, Prototype Instance|10| \| |
+|Assignment by Modulus|`<%%`|Boolean, Integers, Rationals, String, Prototype Instance|10| \| |
 
 Note: Prototypes can use the operator (`OP`) key word to adapt functionality
 
@@ -109,27 +112,27 @@ Note: Prototypes can use the operator (`OP`) key word to adapt functionality
 
 ```
 Definitions {
-    INT a <-- 7+2-(-3+4)
-    INT b <-- 8*4
-    RAT c <-- 7/2
-    STR d <-- "ka"
+    INT a <== 7+2-(-3+4)
+    INT b <== 8*4
+    RAT c <== 7/2
+    STR d <== "ka"
     STR FUNC e (f) {
         return f + "boom"
     }
     PROTO G {
         ATR STR h
         G(x){
-            self.h <-- h
+            self.h <== h
         }
     }
-    G i <-- G("this is a good sentence")
-    ||DNE|| j <-- || 1, 1.02, "bob", i, true, empty ||
+    G i <== G("this is a good sentence")
+    ||DNE|| j <== || 1, 1.02, "bob", i, true, empty ||
     j + d
-    ||INT|| k <-- || 1, 2, 5, 7, 73, 45 ||
+    ||INT|| k <== || 1, 2, 5, 7, 73, 45 ||
     k - 7
-    <<DNE>> l <-- << "name" : "lasagna" , "color" : G("red"), "height" : 12 >> 
+    <<DNE>> l <== << "name" : "lasagna" , "color" : G("red"), "height" : 12 >> 
     l.join( << "awesome?" : true >> )
-    <<INT>> m <-- << "horsepower" : 1200, "price" : 270000 , "model_number" : 79 >> 
+    <<INT>> m <== << "horsepower" : 1200, "price" : 270000 , "model_number" : 79 >> 
     m.remove("price")
 }
 Pipelines {
@@ -202,7 +205,7 @@ Javascript
 Plumb
 ```
 Definitions {
-    STR x <-- "Hello World!"
+    STR x <== "Hello World!"
 }
 Pipelines {
     x --> print
