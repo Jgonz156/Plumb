@@ -60,9 +60,9 @@ Disclaimer: There are no single line comments in Plumb, the default comment is m
 
 ### Operators and Precedence 
 |Operator|Symbol|Operational Types|Precedence|Associativity|
-|--------|------|-----------------|--------|------|
-|Attributor|`.`|Functions|1|L to R|
-|Indexer|`[]`|Functions|1| \| |
+|--------|------|-----------------|:------:|:----:|
+|Attributor|`.`|Prototypes|1|L to R|
+|Indexer|`[]`|Prototypes|1| \| |
 |Call|`()`|Functions|1| \| |
 |Negation|`!`|Boolean|2|R to L|
 |Negation|`-`|Integers, Rationals|2| \| |
