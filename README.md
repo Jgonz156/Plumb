@@ -81,11 +81,11 @@ Disclaimer: There are no single line comments in Plumb, the default comment is m
 |Logical AND|`and`|Boolean|8| \| |
 |Logical OR|`or`|Boolean|9| \| |
 |Assignment by Expression|`<==`|Boolean, Integers, Rationals, String, Prototype Instance|10|R to L|
-|Assignment by Addition|`<++`|Boolean, Integers, Rationals, String, Prototype Instance|10| \| |
-|Assignment by Subtraction|`<--`|Boolean, Integers, Rationals, String, Prototype Instance|10| \| |
-|Assignment by Multiplication|`<**`|Boolean, Integers, Rationals, String, Prototype Instance|10| \| |
-|Assignment by Division|`<//`|Boolean, Integers, Rationals, String, Prototype Instance|10| \| |
-|Assignment by Modulus|`<%%`|Boolean, Integers, Rationals, String, Prototype Instance|10| \| |
+|Assignment by Addition|`<++`|Integers, Rationals, String|10| \| |
+|Assignment by Subtraction|`<--`|Integers, Rationals|10| \| |
+|Assignment by Multiplication|`<**`|Integers, Rationals, String|10| \| |
+|Assignment by Division|`<//`|Integers, Rationals|10| \| |
+|Assignment by Modulus|`<%%`|Integers, Rationals|10| \| |
 
 Note: Prototypes can use the operator (`OP`) key word to adapt functionality
 
@@ -127,9 +127,9 @@ Definitions {
     }
     G i <== G("this is a good sentence")
     ||DNE|| j <== || 1, 1.02, "bob", i, true, empty ||
-    j + d
+    j.append(d)
     ||INT|| k <== || 1, 2, 5, 7, 73, 45 ||
-    k - 7
+    k.remove(k.search(7))
     <<DNE>> l <== << "name" : "lasagna" , "color" : G("red"), "height" : 12 >> 
     l.join( << "awesome?" : true >> )
     <<INT>> m <== << "horsepower" : 1200, "price" : 270000 , "model_number" : 79 >> 
