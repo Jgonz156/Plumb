@@ -66,12 +66,12 @@ Disclaimer: There are no single line comments in Plumb, the default comment is m
 |Call|`()`|Functions|1| \| |
 |Negation|`!`|Boolean|2|R to L|
 |Negation|`-`|Integers, Rationals|2| \| |
-|Multiplication|`*`|Integers, Rationals, String|3| L to R |
-|Division|`/`|Integers, Rationals|3| \| |
-|Modulus|`%`|Integers, Rationals|3| \| |
-|Addition|`+`|Integers, Rationals, String|4| \| |
-|Subtraction|`-`|Integers, Rationals|4| \| |
-|Exponentiation|`^`|Integers, Rationals|5| R to L |
+|Exponentiation|`^`|Integers, Rationals|3| R to L |
+|Multiplication|`*`|Integers, Rationals, String|4| L to R |
+|Division|`/`|Integers, Rationals|4| \| |
+|Modulus|`%`|Integers, Rationals|4| \| |
+|Addition|`+`|Integers, Rationals, String|5| \| |
+|Subtraction|`-`|Integers, Rationals|5| \| |
 |Less Than|`<`|Integers, Rationals|6|None|
 |Less Than or equal|`<=`|Integers, Rationals|6| \| |
 |Greater Than|`>`|Integers, Rationals|6| \| |
