@@ -1,0 +1,96 @@
+Plumb {
+	Program             =  ("\n")* Import* ("\n")* Definitions? ("\n")* Pipelines? ("\n")* end
+    Import 			    = ("\n")* "import" string ("\n")*
+    Definitions         = definition Block
+    Statement           = ("\n")* Statement ("\n")*                                                         --Newline
+    					| VariableDec 
+    					| Assignment 
+                        | FunctionDec 
+                        | PrototypeDec 
+                        | AttributeDec 
+                        | IfStatement 
+                        | WhileStatement 
+                        | ForStatement 
+                        | ReturnStatement 
+                        | ListDec 
+                        | MapDec 
+                        | Exp7_Self
+                        | Exp7_Call
+                        | Exp7_ID
+                        | Exp7_Expression
+    VariableDec         = (prototype | id) id assignment Expression
+    Assignment          = (self".")? id assignment Expression
+    FunctionDec         = (prototype | id) function id "(" Parameters ")" Block
+    PrototypeDec        = "PROTO" id Block
+    AttributeDec        = "ATR" prototype id (assignment Expression)*
+    IfStatement         = if "(" Expression ")" Block
+    WhileStatement      = while "(" Expression ")" Block
+    ForStatement        = for "(" Statement ":" Expression ":" Statement ")" Block
+    ReturnStatement     = return Expression
+    ListDec             = "||" prototype "||" id assignment List
+    MapDec              = "<<" prototype ">>" id assignment Map
+    Block               = "{"  Statement*  "}" ("\n")*
+    Expression          = Exp1 "or" Exp1																	-- BooleanOR
+    					| Exp1
+    Exp1		        = Exp2 "and" Exp2																	-- BooleanAND
+    					| Exp2
+    Exp2                = Exp3 ( "==" | "!=" ) Exp3 														-- BooleanEquality
+    					| Exp3
+    Exp3                = Exp4 ( "<=" | ">=" | "<" | ">"  ) Exp4 									        --BooleanConditionals
+    					| Exp4
+    Exp4			    = Exp4 ( "+" | "-" ) Exp5															-- AdditionSubtraction
+    					| Exp5
+    Exp5                = Exp5 ( "*" | "/" | "%" ) Exp6 													-- MultiplicationDivisionModulus
+    					| Exp6
+    Exp6			    = Exp7 "^" Exp6 																	-- Exponentiation
+    					| Exp7
+                        | ("!" | "-") Exp7																	--Negation
+    Exp7 		        = rational 
+    					| integer
+    					| boolean
+                        | string
+                        | List
+                        | Map
+                        | self (Attribute)? 																-- Self
+                        | Call (Index | Attribute)? 														-- Call
+                        | id (Index | Attribute)?															-- ID
+                        | "(" Expression ")" (Index | Attribute)? 									        -- Expression
+    Call			    = id "(" Arguments ")"
+    Index			    = "[" Expression "]"
+    Attribute		    = ("."Call)+ | ("."id)+
+    Parameters          = ListOf<id, ",">
+    Arguments	        = ListOf<Expression, ",">
+    List 			    = "||" ListOf<Expression, ",">  "||"
+    Map				    = "<<"  Expression ":" Expression ("," Expression ":" Expression)* ">>"
+    string              = "\"" char* "\""
+    char                = ~keyword ~"\\" ~"\"" any
+    self			    = "self" 	    ~idchar
+    function            = "FUNC" 		~idchar
+    definition          = "Definitions" ~idchar
+    pipeline            = "Pipelines" 	~idchar
+    while               = "while"	    ~idchar
+    for                 = "for" 		~idchar
+    if                  = "if" 			~idchar
+    return		        = "return" 	    ~idchar
+    boolean		        = (true | false)
+    true 			    = "true" 		~idchar
+    false 			    = "false"		~idchar
+    op                  = "OP"			~idchar
+    assignment          = "<==" | "<++" | "<--" | "<**" | "<//" | "<%%"
+    prototype	        = "INT" | "STR" | "RAT" | "BOOL" | "DNE"
+    id 				    = ~keyword letter idchar*
+    idchar		        = letter | digit | "_"
+    keyword 	        = function | while | for | if | return | prototype | true | false | definition | pipeline | op
+    rational 		    = digit+ ("." digit+)? (("E" | "e") ("+" | "-")? digit+)?
+    integer			    = digit+ 
+    space              += ( " " | "\t" | "\r" ) | "::" any* "::"
+    Pipelines           = pipeline "{" Pipe* "}"
+    Pipe                = Injection 
+    					| Drain 
+                        | Caster 
+                        | Factory 
+    Injection		    = id ("," id)* "-->" id
+    Drain			    = id "-" (id "-")+ ">" id
+    Caster			    = id ("," id)* "-(" prototype ")->" id
+    Factory			    = id ("," id)* "--<(" Pipe
+}
