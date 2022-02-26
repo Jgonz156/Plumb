@@ -21,6 +21,12 @@ export class Definitions {
     }
 }
 
+export class Statement {
+    constructor(statement){
+        this.statement = statement
+    }
+}
+
 export class VariableDec {
     constructor(prototype, id, assignment, expression){
         this.prototype = prototype
@@ -56,7 +62,8 @@ export class PrototypeDec {
 }
 
 export class AttributeDec {
-    constructor(id, assignment, expression){
+    constructor(prototype, id, assignment, expression){
+        this.prototype = prototype
         this.id = id
         this.assignment = assignment
         this.expression = expression
@@ -93,16 +100,18 @@ export class ReturnStatement {
 }
 
 export class ListDec {
-    constructor(prototype, assignment, list){
+    constructor(prototype, id, assignment, list){
         this.prototype = prototype
+        this.id = id
         this.assignment = assignment
         this.list = list
     }
 }
 
 export class MapDec {
-    constructor(prototype, assignment, map){
+    constructor(prototype, id, assignment, map){
         this.prototype = prototype
+        this.id = id
         this.assignment = assignment
         this.map = map
     }
@@ -129,24 +138,9 @@ export class UnaryExpression {
     }
 }
 
-export class Call {
-    constructor(id, arguments){
-        this.id = id
-        this.arguments = arguments
-    }
-}
-
-export class Index {
-    constructor(expression){
-        this.expression = expression
-    }
-}
-
-export class Attribute {
-    constructor(isCall, call, id){
-        this.isCall = isCall
-        this.call = call
-        this.id = id
+export class Pipelines {
+    constructor(pipes){
+        this.pipes = pipes
     }
 }
 
