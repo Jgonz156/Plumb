@@ -2,14 +2,14 @@ import fs from "fs"
 import ohm from "ohm-js"
 import * as core from "./core.js"
 
-const plumbGrammar = ohm.grammar(fs.readFileSync("src/carlos.ohm"))
+const plumbGrammar = ohm.grammar(fs.readFileSync("src/plumb.ohm"))
 
 const astBuilder = plumbGrammar.createSemantics().addOperation("ast", {
     Program(_n0, imports, _n1, definition, _n2, pipeline, _n4, _end){
         return new core.Program(
-            imports.ast(), 
-            definition.ast(), 
-            pipeline.ast()
+            imports.ast()[0] ?? null, 
+            definition.ast()[0] ?? null, 
+            pipeline.ast()[0] ?? null
         )
     },
     Import(_n0, _imp, path, _n1){
@@ -18,11 +18,11 @@ const astBuilder = plumbGrammar.createSemantics().addOperation("ast", {
     Definitions(_defn, block){
         return new core.Definitions(block.ast())
     },
-    Statement_Newline(_n0, statement, _n1){
-        return new core.Statement(statement.ast())
+    Statement_Newlines(_n0, statement, _n1){
+        return statement.ast()
     },
     Statement(statement){
-        return new core.Statement(statement.ast())
+        return statement.ast()
     },
     VariableDec(prototype, id, assignment, expression){
         return new core.VariableDec(
@@ -34,7 +34,7 @@ const astBuilder = plumbGrammar.createSemantics().addOperation("ast", {
     },
     Assignment(self, _dot, id, assignment, expression){
         return new core.Assignment(
-            self.sourceString, 
+            self.sourceString[0] ?? null, 
             id.sourceString, 
             assignment.sourceString, 
             expression.ast()
@@ -44,7 +44,7 @@ const astBuilder = plumbGrammar.createSemantics().addOperation("ast", {
         return new core.FunctionDec(
             prototype.sourceString,
             id.sourceString,
-            parameters.ast(),
+            parameters.asIteration().ast(),
             block.ast()
         )
     },
@@ -74,7 +74,7 @@ const astBuilder = plumbGrammar.createSemantics().addOperation("ast", {
             block.ast()
         )
     },
-    ForStatement(_for, _lp, statement0, _colon0, expression, _colon1, statement1, block){
+    ForStatement(_for, _lp, statement0, _colon0, expression, _colon1, statement1, _rp, block){
         return new core.ForStatment(
             statement0.ast(),
             expression.ast(),
@@ -85,20 +85,26 @@ const astBuilder = plumbGrammar.createSemantics().addOperation("ast", {
     ReturnStatement(_return, expression){
         return new core.ReturnStatement(expression.ast())
     },
-    ListDec(_pipe0, prototype, _pipe1, id, assignment, list){
+    ListDec(prototype, id, assignment, _pipe0, list, _pipe1){
         return new core.ListDec(
             prototype.sourceString, 
             id.sourceString,
             assignment.sourceString, 
-            list.ast()
+            list.asIteration().ast()
         )
     },
-    MapDec(_wall0, prototype, _wall1, id, assignment, map){
+    MapDec(prototype, id, assignment, _wall0, map, _wall1){
         return new core.MapDec(
             prototype.sourceString,
             id.sourceString,
             assignment.sourceString,
-            map.ast()
+            map.asIteration().ast()
+        )
+    },
+    KeyValuePair(key, _colon, value){
+        return new core.KeyValuePair(
+            key.ast(),
+            value.ast()
         )
     },
     Block(_lb, statements, _rb, _n){
@@ -159,8 +165,94 @@ const astBuilder = plumbGrammar.createSemantics().addOperation("ast", {
             right.ast()
         )
     },
-    Exp7(){
-
+    Exp7_Index(left, _lb, exp, _rb){
+        return new core.IndexExpression(
+            left.ast(),
+            exp.ast()
+        )
     },
-    
+    Exp7_Call(left, _lp, args, _rp){
+        return new core.Call(
+            left.ast(),
+            args.asIteration().ast()
+        )
+    },
+    Exp7_Method(left, _dot, id, _lp, args, _rp){
+        return new core.MethodExpression(
+            left.ast(),
+            id.sourceString(),
+            args.asIteration().ast()
+        )
+    },
+    Exp8_Expression(_lp, exp, _rp){
+        return exp.ast()
+    },
+    rational(_int0, _dot, _int1, _e, _sign, _pow){
+        return new core.Token("Rational", this.source)
+    },
+    integer(_int){
+        return new core.Token("Integer", this.source)
+    },
+    boolean(_bool){
+        return new core.Token("Boolean", this.source)
+    },
+    string(_lq, chars, _rq){
+        return new core.Token("String", this.source)
+    },
+    self(_self){
+        return new core.Token("Self", this.source)
+    },
+    id(_letter, _rest){
+        return new core.Token("Id", this.source)
+    },
+    Pipelines(_pipeline, _lb, pipes, _rb){
+        return new core.Pipelines(
+            pipes.ast()
+        )
+    },
+    Pipe_Newlines(_nl0, pipe, _nl1){
+        return pipe.ast()
+    },
+    Pipe_Injection(args, op, end){
+        return new core.Pipe(
+            args.asIteration().ast(),
+            op.sourceString,
+            end.ast()
+        )
+    },
+    Pipe_Drain(args, op, end){
+        return new core.Pipe(
+            args.asIteration().ast(),
+            op.sourceString,
+            end.ast()
+        )
+    },
+    Pipe_Caster(args, op, end){
+        return new core.Pipe(
+            args.asIteration().ast(),
+            op.sourceString,
+            end.ast()
+        )
+    },
+    Pipe_Factory(args, op, end){
+        return new core.Pipe(
+            args.asIteration().ast(),
+            op.sourceString,
+            end.ast()
+        )
+    },
+    _terminal() {
+        return new core.Token("Sym", this.source)
+    },
+    _iter(...children) {
+        return children.map(child => child.ast())
+    }
 })
+
+export default function ast(sourceCode) {
+    const match = plumbGrammar.match(sourceCode)
+    if (!match.succeeded()) {
+      throw new Error(match.message)
+    }
+    return astBuilder(match).ast()
+  }

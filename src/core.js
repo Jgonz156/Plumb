@@ -36,6 +36,12 @@ export class VariableDec {
     }
 }
 
+export class Variable {
+    constructor(){
+
+    }
+}
+
 export class Assignment {
     constructor(self, id, assignment, expression){
         this.self = self
@@ -54,10 +60,22 @@ export class FunctionDec {
     }
 }
 
+export class Function {
+    constructor(){
+
+    }
+}
+
 export class PrototypeDec {
     constructor(id, block){
         this.id = id
         this.block = block
+    }
+}
+
+export class Prototype {
+    constructor(){
+
     }
 }
 
@@ -67,6 +85,12 @@ export class AttributeDec {
         this.id = id
         this.assignment = assignment
         this.expression = expression
+    }
+}
+
+export class Attribute {
+    constructor(){
+
     }
 }
 
@@ -117,6 +141,13 @@ export class MapDec {
     }
 }
 
+export class KeyValuePair {
+    constructor(key, value){
+        this.key = key
+        this.value = value
+    }
+}
+
 export class Block {
     constructor(statements){
         this.statements = statements
@@ -132,15 +163,70 @@ export class BinaryExpression {
 }
 
 export class UnaryExpression {
-    constructor(op, right){
+    constructor(op, operand){
         this.op = op
-        this.right = right
+        this.right = operand
+    }
+}
+
+export class ListExpression {
+    constructor(elements){
+        this.elements = elements
+    }
+}
+
+export class MapExpression {
+    constructor(keyValuePairs){
+        this.keyValuePairs = keyValuePairs
+    }
+}
+
+export class IndexExpression {
+    constructor(prototype, index){
+        this.prototype = prototype
+        this.index = index
+    }
+}
+
+export class Call {
+    constructor(id, args){
+        this.id = id
+        this.args = args
+    }
+}
+
+export class AttributeExpression {
+    constructor(prototype, attribute){
+        this.prototype = prototype
+        this.attribute = attribute
+    }
+}
+
+export class MethodExpression {
+    constructor(prototype, method, args){
+        this.prototype = prototype
+        this.method = method
+        this.args = args
+    }
+}
+
+export class Method {
+    constructor() {
+
     }
 }
 
 export class Pipelines {
     constructor(pipes){
         this.pipes = pipes
+    }
+}
+
+export class Pipe {
+    constructor(inputs, op, nextPipe){
+        this.inputs = inputs
+        this.op = op
+        this.nextPipe = nextPipe
     }
 }
 

@@ -66,7 +66,7 @@ Disclaimer: There are no single line comments in Plumb, the default comment is m
 |Call|`()`|Functions|1| \| |
 |Negation|`!`|Boolean|2|R to L|
 |Negation|`-`|Integers, Rationals|2| \| |
-|Exponentiation|`^`|Integers, Rationals|3| R to L |
+|Exponentiation|`^`|Integers, Rationals|3| \| |
 |Multiplication|`*`|Integers, Rationals, String|4| L to R |
 |Division|`/`|Integers, Rationals|4| \| |
 |Modulus|`%`|Integers, Rationals|4| \| |
@@ -116,13 +116,16 @@ Definitions {
     INT b <== 8*4
     RAT c <== 7/2
     STR d <== "ka"
-    STR FUNC e (f) {
+    STR FUNC e ( STR f ) {
         return f + "boom"
     }
     PROTO G {
         ATR STR h
-        G(x){
+        G FUNC G( STR x ){
             self.h <== h
+        }
+        ATR STR FUNC getH(){
+        	return self.h
         }
     }
     G i <== G("this is a good sentence")
@@ -131,18 +134,17 @@ Definitions {
     ||INT|| k <== || 1, 2, 5, 7, 73, 45 ||
     k.remove(k.search(7))
     <<DNE>> l <== << "name" : "lasagna" , "color" : G("red"), "height" : 12 >> 
-    l.join( << "awesome?" : true >> )
+    l.add( "awesome", true )
     <<INT>> m <== << "horsepower" : 1200, "price" : 270000 , "model_number" : 79 >> 
     m.remove("price")
-}
-Pipelines {
+} Pipelines {
     a, b, c --> print
     d --> e --> print
     i -h-> print
     j --> print
-    k --<( --> print
+    k --<( a --> print
     l --> print
-    m --<( --> print
+    m --<( a --> print
 }
 ```
 
@@ -161,6 +163,9 @@ class G {
     h
     constructor(x){
         this.h = x
+    }
+    getH() {
+        return this.h
     }
 }
 var i = new G("this is a good sentence")

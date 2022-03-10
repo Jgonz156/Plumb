@@ -4,11 +4,11 @@ proportional to its character length
 ::
 Definitions {
     STR FUNC stretched(STR word) {
-        INT counter <-- 0
-        STR stretched_word <-- ""
+        INT counter <== 0
+        STR stretched_word <== ""
         while(counter < STR.c_length(word)) {
-            stretched_word + (word[counter]*(counter+1) )
-            counter++
+            stretched_word + (word[counter]*(counter+1))
+            counter <++ 1
         }
         return stretched_word
     } 

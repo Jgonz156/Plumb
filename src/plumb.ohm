@@ -2,7 +2,7 @@ Plumb {
 	Program = ("\n")* Import* ("\n")* Definitions? ("\n")* Pipelines? ("\n")* end
     Import = ("\n")* "import" string ("\n")*
     Definitions = definition Block
-    Statement = ("\n")* Statement ("\n")* --Newline
+    Statement = ("\n")* Statement ("\n")* -- Newlines
     		  | VariableDec 
     		  | Assignment 
               | FunctionDec 
@@ -14,20 +14,22 @@ Plumb {
               | ReturnStatement 
               | ListDec 
               | MapDec 
-              | Exp7_Call
-              | Exp7_Expression
+              | Exp7
     VariableDec = (prototype | id) id assignment Expression
     Assignment = (self".")? id assignment Expression
-    FunctionDec = (prototype | id) function id "(" prototype id ("," prototype id)* ")" Block
+    FunctionDec = (prototype | id) function id "(" ListOf<typeParameterPair, ","> ")" Block
+    typeParameterPair = (prototype|id) space id
     PrototypeDec = "PROTO" id Block
-    AttributeDec = "ATR" (prototype | id) id (assignment Expression)*
+    AttributeDec = "ATR" (prototype | id) id (assignment Expression)?
+    MethodDec = "ATR" (prototype | id) function id "(" ListOf<typeParameterPair, ","> ")" Block
     IfStatement = if "(" Expression ")" Block
     WhileStatement = while "(" Expression ")" Block
     ForStatement = for "(" Statement ":" Expression ":" Statement ")" Block
     ReturnStatement = return Expression
     ListDec = (prototype | id) id assignment "||" ListOf<Expression, ",">  "||"
-    MapDec = (prototype | id) id assignment "<<"  Expression ":" Expression ("," Expression ":" Expression)* ">>"
-    Block = "{"  Statement*  "}" ("\n")*
+    MapDec = (prototype | id) id assignment "<<" ListOf<KeyValuePair, ","> ">>"
+    KeyValuePair = Expression ":" Expression
+    Block = "{" Statement* "}" ("\n")*
     Expression = Exp1 "or" Exp1 -- BooleanOR
     	       | Exp1
     Exp1 = Exp2 "and" Exp2 -- BooleanAND
@@ -43,15 +45,17 @@ Plumb {
     Exp6 = Exp7 "^" Exp6 -- Exponentiation
     	 | Exp7
          | ("!" | "-") Exp7 -- Negation
-    Exp7 = Exp7 "." id "(" ListOf<Expression, ","> ")" -- Call
-    	 | Exp7 "." id -- Attribute
-         | Exp7 "[" Expression "]" -- Index
-         | rational 
+    Exp7 = Exp7 "[" Expression "]" -- Index
+    		  | Exp7 "(" ListOf<Expression, ","> ")" -- Call
+              | Exp7 "." id "(" ListOf<Expression, ","> ")"  -- Method
+              | Exp7 "." id -- Attribute
+              | Exp8
+    Exp8 = rational 
     	 | integer
     	 | boolean
          | string
-         | self 																																																																	
-         | id 																																		
+         | self																														
+         | id 
          | "(" Expression ")" -- Expression
     string = "\"" char* "\""
     char = ~keyword ~"::" ~"\"" any
@@ -78,13 +82,13 @@ Plumb {
     integer = digit+ 
     space := ( " " | "\t" | "\r" ) | "::" (~"::" any)* "::" -- Comment
     Pipelines = pipeline "{" Pipe* "}"
-    Pipe = ("\n")* Pipe  ("\n")* -- Newline
-    	 |Injection 
-    	 | Drain 
-         | Caster 
-         | Factory 
-    Injection = id ("," id)* "-->" id
-    Drain = id "-" (id "-")+ ">" id
-    Caster = id ("," id)* "-(" (prototype | id) ")->" id
-    Factory	= id ("," id)* "--<(" Pipe
+    Pipe = ("\n")* Pipe ("\n")* -- Newlines
+    	 | NonemptyListOf<Exp8, ","> injection (Pipe | id) -- Injection
+    	 | NonemptyListOf<Exp8, ","> drain (Pipe | id) -- Drain
+         | NonemptyListOf<Exp8, ","> caster (Pipe | id) -- Caster
+         | NonemptyListOf<Exp8, ","> factory Pipe -- Factory
+    injection = "-->" 
+    drain = "-" ( ( id | integer ) "-")+ ">"
+    caster = "-(" (prototype | id) ")->"
+    factory	= "--<("
 }
