@@ -231,8 +231,8 @@ export class Pipe {
 }
 
 export class Token {
-    constructor(tokenType, source){
-        this.tokenType = tokenType
+    constructor(category, source){
+        this.category = category
         this.source = source
     }
 

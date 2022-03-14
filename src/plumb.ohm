@@ -50,7 +50,7 @@ Plumb {
               | Exp7 "." id "(" ListOf<Expression, ","> ")"  -- Method
               | Exp7 "." id -- Attribute
               | Exp8
-    Exp8 = rational 
+    Exp8 = rational
     	 | integer
     	 | boolean
          | string
@@ -78,7 +78,7 @@ Plumb {
     id = ~keyword letter idchar*
     idchar = letter | digit | "_"
     keyword = function | while | for | if | return | prototype | true | false | definition | pipeline | op
-    rational = digit+ ("." digit+)? (("E" | "e") ("+" | "-")? digit+)?
+    rational = digit+ ("." digit+) (("E" | "e") ("+" | "-")? digit+)?
     integer = digit+ 
     space := ( " " | "\t" | "\r" ) | "::" (~"::" any)* "::" -- Comment
     Pipelines = pipeline "{" Pipe* "}"

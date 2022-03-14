@@ -48,6 +48,9 @@ const astBuilder = plumbGrammar.createSemantics().addOperation("ast", {
             block.ast()
         )
     },
+    typeParameterPair(prototype, _space, id){
+        return new core.Token(`${prototype.sourceString} Parameter`, this.source)
+    },
     PrototypeDec(_proto, id, block){
         return new core.PrototypeDec(
             id.sourceString, 
@@ -180,24 +183,30 @@ const astBuilder = plumbGrammar.createSemantics().addOperation("ast", {
     Exp7_Method(left, _dot, id, _lp, args, _rp){
         return new core.MethodExpression(
             left.ast(),
-            id.sourceString(),
+            id.sourceString,
             args.asIteration().ast()
+        )
+    },
+    Exp7_Attribute(left, _dot, id){
+        return new core.AttributeExpression(
+            left.ast(),
+            id.sourceString
         )
     },
     Exp8_Expression(_lp, exp, _rp){
         return exp.ast()
     },
     rational(_int0, _dot, _int1, _e, _sign, _pow){
-        return new core.Token("Rational", this.source)
+        return new core.Token("RAT", this.source)
     },
     integer(_int){
-        return new core.Token("Integer", this.source)
+        return new core.Token("INT", this.source)
     },
     boolean(_bool){
-        return new core.Token("Boolean", this.source)
+        return new core.Token("BOOL", this.source)
     },
     string(_lq, chars, _rq){
-        return new core.Token("String", this.source)
+        return new core.Token("STR", this.source)
     },
     self(_self){
         return new core.Token("Self", this.source)
