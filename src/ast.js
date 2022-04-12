@@ -13,7 +13,7 @@ const astBuilder = plumbGrammar.createSemantics().addOperation("ast", {
         )
     },
     Import(_n0, _imp, path, _n1){
-        return new core.Import(path.sourceString)
+        return new core.ImportDec(path.sourceString)
     },
     Definitions(_defn, block){
         return new core.Definitions(block.ast())
@@ -65,6 +65,14 @@ const astBuilder = plumbGrammar.createSemantics().addOperation("ast", {
             expression.ast()
         )
     },
+    MethodDec(_atr, prototype, _func, id, _lp, parameters, _rp, block){
+        return new core.MethodDec(
+            prototype.sourceString,
+            id.sourceString,
+            parameters.asIteration().ast(),
+            block.ast()
+        )
+    },
     IfStatement(_if, _lp, expression, _rp, block){
         return new core.IfStatement(
             expression.ast(),
@@ -78,7 +86,7 @@ const astBuilder = plumbGrammar.createSemantics().addOperation("ast", {
         )
     },
     ForStatement(_for, _lp, statement0, _colon0, expression, _colon1, statement1, _rp, block){
-        return new core.ForStatment(
+        return new core.ForStatement(
             statement0.ast(),
             expression.ast(),
             statement1.ast(),
@@ -88,11 +96,20 @@ const astBuilder = plumbGrammar.createSemantics().addOperation("ast", {
     ReturnStatement(_return, expression){
         return new core.ReturnStatement(expression.ast())
     },
+    EmptyReturnStatement(_return){
+        return new core.ReturnStatement(new core.Token("DNE", "None"))
+    },
     ListDec(prototype, id, assignment, _pipe0, list, _pipe1){
         return new core.ListDec(
             prototype.sourceString, 
             id.sourceString,
             assignment.sourceString, 
+            list.asIteration().ast()
+        )
+    },
+    ListLit(_lp, prototype, _rp, _pipe0, list, _pipe1){
+        return new core.ListExp(
+            `||${prototype.sourceString}||`, 
             list.asIteration().ast()
         )
     },
@@ -104,6 +121,12 @@ const astBuilder = plumbGrammar.createSemantics().addOperation("ast", {
             map.asIteration().ast()
         )
     },
+    MapLit(_lp, prototype, _rp, _wall0, map, _wall1){
+        return new core.MapExp(
+            `<<${prototype.sourceString}>>`,
+            map.asIteration().ast()
+        )
+    },
     KeyValuePair(key, _colon, value){
         return new core.KeyValuePair(
             key.ast(),
@@ -111,7 +134,7 @@ const astBuilder = plumbGrammar.createSemantics().addOperation("ast", {
         )
     },
     Block(_lb, statements, _rb, _n){
-        return new core.Statement(statements.ast())
+        return new core.Block(statements.ast())
     },
     Expression_BooleanOR(left, or, right){
         return new core.BinaryExpression(
@@ -210,6 +233,9 @@ const astBuilder = plumbGrammar.createSemantics().addOperation("ast", {
     },
     self(_self){
         return new core.Token("Self", this.source)
+    },
+    doesnotexist(_dne){
+        return new core.Token("DNE", this.source)
     },
     id(_letter, _rest){
         return new core.Token("Id", this.source)

@@ -8,10 +8,14 @@ Plumb {
               | FunctionDec 
               | PrototypeDec 
               | AttributeDec 
+              | MethodDec
               | IfStatement 
               | WhileStatement 
               | ForStatement 
               | ReturnStatement 
+              | EmptyReturnStatement 
+              | ContinueStatement
+              | BreakStatement
               | ListDec 
               | MapDec 
               | Exp7
@@ -26,8 +30,13 @@ Plumb {
     WhileStatement = while "(" Expression ")" Block
     ForStatement = for "(" Statement ":" Expression ":" Statement ")" Block
     ReturnStatement = return Expression
+    EmptyReturnStatement = return
+    ContinueStatement = continue
+    BreakStatement = break
     ListDec = (prototype | id) id assignment "||" ListOf<Expression, ",">  "||"
+    ListLit = "(" (prototype | id) ")" "||" ListOf<Expression, ",">  "||"
     MapDec = (prototype | id) id assignment "<<" ListOf<KeyValuePair, ","> ">>"
+    MapLit = "(" (prototype | id) ")" "<<" ListOf<KeyValuePair, ","> ">>"
     KeyValuePair = Expression ":" Expression
     Block = "{" Statement* "}" ("\n")*
     Expression = Exp1 "or" Exp1 -- BooleanOR
@@ -54,12 +63,21 @@ Plumb {
     	 | integer
     	 | boolean
          | string
-         | self																														
+         | self 
+         | doesnotexist
          | id 
+         | ListLit
+         | MapLit
          | "(" Expression ")" -- Expression
+         | prototype
     string = "\"" char* "\""
     char = ~keyword ~"::" ~"\"" any
+    continue = "continue" ~idchar
+    break = "break" ~idchar
     self = "self" ~idchar
+    doesnotexist = (none | all)
+    none = "None" ~idchar
+    all = "All" ~idchar
     function = "FUNC" ~idchar
     definition = "Definitions" ~idchar
     pipeline = "Pipelines" ~idchar
@@ -77,7 +95,7 @@ Plumb {
               | "<<" prototype ">>" -- MapProto
     id = ~keyword letter idchar*
     idchar = letter | digit | "_"
-    keyword = function | while | for | if | return | prototype | true | false | definition | pipeline | op
+    keyword = continue | break | self | none | all | function | while | for | if | return | prototype | true | false | definition | pipeline | op
     rational = digit+ ("." digit+) (("E" | "e") ("+" | "-")? digit+)?
     integer = digit+ 
     space := ( " " | "\t" | "\r" ) | "::" (~"::" any)* "::" -- Comment

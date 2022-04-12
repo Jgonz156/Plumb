@@ -64,6 +64,7 @@ const syntaxChecks = [
   //["u-escape", 'print("\\u{a}\\u{2c}\\u{1e5}\\u{ae89}\\u{1f4a9}\\u{10ffe8}");'],
   ["end of program after comment", "Definitions{}::::"],
   ["comments with no text", "::::::::"],
+  //Write pipe tests
 ]
 
 // Programs with syntax errors that the parser will detect
@@ -79,24 +80,25 @@ const syntaxErrors = [
   ["a statement starting with a )", "Definitions{print(5)\n)\n}", /Line 2, col 1:/],
   ["an expression starting with a *", "Definitions{\nINT x <== * 71\n}", /Line 2, col 11:/],
   ["negation before exponentiation", "Definitions{\nprint(-2**2)\n}", /Line 2, col 10:/],
-  ["mixing ands and ors", "Definitions{\nprint(1 and 2 or 3)\n}", /Line 2, col 15:/],
-  ["mixing ors and ands", "Definitions{\nprint(1 or 2 and 3)\n}", /Line 2, col 15:/],
+  ["odd operands for ands", "Definitions{\nprint(1 and 2 and 3)\n}", /Line 2, col 15:/],
+  ["odd operands for ors", "Definitions{\nprint(1 or 2 or 3)\n}", /Line 2, col 14:/],
   ["associating relational operators", "Definitions{\nprint(1 < 2 < 3)\n}", /Line 2, col 13:/],
   ["while without braces", "Definitions{\nwhile true\nprint(1)\n}", /Line 2, col 7/],
   ["if without braces", "Definitions{\nif x < 3\nprint(1)\n}", /Line 2, col 4/],
-  ["for as identifier", "Definitions{\nSTR for <== \"Bob\"\n}", /Line 2, col 5/],
-  ["if as identifier", "Definitions{INT if <== 8}", /Line 1, col 17/],
+  ["for as identifier", "Definitions{\nSTR for <== \"Bob\"\n}", /Line 2, col 9/],
+  ["if as identifier", "Definitions{INT if <== 8}", /Line 1, col 20/],
   ["unbalanced brackets", "Definitions{\n\t||INT|| FUNC f(){\n ||INT|| x <== ||1,2,3\n}\n}", /Line 3, col 23/],
   //["empty array without type", "print([]);", /Line 1, col 9/],
   //["bad array literal", "print([1,2,]);", /Line 1, col 12/],
   ["empty subscript", "Definitions{\nprint(a[])\n}", /Line 2, col 9/],
-  ["true is not assignable", "Definitions{\nINT true <== 1\n}", /Line 2, col 5/],
-  ["false is not assignable", "Definitions{\nINT false <== 1\n}", /Line 2, col 5/],
+  ["true is not assignable", "Definitions{\nINT true <== 1\n}", /Line 2, col 10/],
+  ["false is not assignable", "Definitions{\nINT false <== 1\n}", /Line 2, col 11/],
   //["no-paren function type", "function f(g:int->int) {}", /Line 1, col 17/],
   //["string lit with unknown escape", 'print("ab\\zcdef");', /col 11/],
   //["string lit with newline", 'print("ab\\zcdef");', /col 11/],
   //["string lit with quote", 'print("ab\\zcdef");', /col 11/],
   //["string lit with code point too long", 'print("\\u{1111111}");', /col 17/],
+  //Write pipe tests
 ]
 
 describe("The parser", () => {

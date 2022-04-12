@@ -9,7 +9,7 @@ export class Program {
     }
 }
 
-export class Import {
+export class ImportDec {
     constructor(stringPath){
         this.path = stringPath
     }
@@ -18,12 +18,6 @@ export class Import {
 export class Definitions {
     constructor(block){
         this.block = block
-    }
-}
-
-export class Statement {
-    constructor(statement){
-        this.statement = statement
     }
 }
 
@@ -36,9 +30,10 @@ export class VariableDec {
     }
 }
 
-export class Variable {
-    constructor(){
-
+export class VariableObj {
+    constructor(prototype, id){
+        this.prototype = prototype
+        this.id = id
     }
 }
 
@@ -60,9 +55,11 @@ export class FunctionDec {
     }
 }
 
-export class Function {
-    constructor(){
-
+export class FunctionObj {
+    constructor(prototype, id, parameters){
+        this.prototype = prototype
+        this.id = id
+        this.parameters = parameters
     }
 }
 
@@ -73,9 +70,16 @@ export class PrototypeDec {
     }
 }
 
-export class Prototype {
-    constructor(){
-
+export class PrototypeObj {
+    static boolean = new PrototypeObj("BOOL")
+    static rational = new PrototypeObj("RAT")
+    static integer = new PrototypeObj("INT")
+    static string = new PrototypeObj("STR")
+    static doesNotExist = new PrototypeObj("DNE")
+    constructor(id, attributes, methods){
+        this.id = id
+        this.attributes = attributes
+        this.methods = methods
     }
 }
 
@@ -88,9 +92,28 @@ export class AttributeDec {
     }
 }
 
-export class Attribute {
-    constructor(){
+export class AttributeObj {
+    constructor(prototype, id){
+        this.prototype = prototype
+        this.id = id
+    }
+}
 
+
+export class MethodDec {
+    constructor(prototype, id, parameters, block){
+        this.prototype = prototype
+        this.id = id
+        this.parameters = parameters
+        this.block = block
+    }
+}
+
+export class MethodObj {
+    constructor(prototype, id, parameters) {
+        this.prototype = prototype
+        this.id = id
+        this.parameters = parameters
     }
 }
 
@@ -108,7 +131,7 @@ export class WhileStatement {
     }
 }
 
-export class ForStatment {
+export class ForStatement {
     constructor(assignment, condition, iteration, block){
         this.assignment = assignment
         this.condition = condition
@@ -132,6 +155,20 @@ export class ListDec {
     }
 }
 
+export class ListExp {
+    constructor(prototype, list){
+        this.prototype = prototype
+        this.list = list
+    }
+}
+
+export class ListPrototypeObj extends PrototypeObj {
+    constructor(prototype){
+        super(`||${prototype}||`)
+        this.basePrototype = prototype
+    }
+}
+
 export class MapDec {
     constructor(prototype, id, assignment, map){
         this.prototype = prototype
@@ -141,13 +178,33 @@ export class MapDec {
     }
 }
 
+export class MapExp {
+    constructor(prototype, map){
+        this.prototype = prototype
+        this.map = map
+    }
+}
+
+export class MapPrototypeObj extends PrototypeObj {
+    constructor(prototype){
+        super(`<<${prototype}>>`)
+        this.basePrototype = prototype
+    }
+}
+
 export class KeyValuePair {
     constructor(key, value){
         this.key = key
         this.value = value
     }
 }
+/*
+export class Pair {
+    constructor(prototype, key, value){
 
+    }
+}
+*/
 export class Block {
     constructor(statements){
         this.statements = statements
@@ -169,21 +226,9 @@ export class UnaryExpression {
     }
 }
 
-export class ListExpression {
-    constructor(elements){
-        this.elements = elements
-    }
-}
-
-export class MapExpression {
-    constructor(keyValuePairs){
-        this.keyValuePairs = keyValuePairs
-    }
-}
-
 export class IndexExpression {
-    constructor(prototype, index){
-        this.prototype = prototype
+    constructor(object, index){
+        this.object = object
         this.index = index
     }
 }
@@ -210,12 +255,6 @@ export class MethodExpression {
     }
 }
 
-export class Method {
-    constructor() {
-
-    }
-}
-
 export class Pipelines {
     constructor(pipes){
         this.pipes = pipes
@@ -237,10 +276,6 @@ export class Token {
     }
 
     get lexeme() {
-        return this.source.contents
-    }
-
-    get description() {
         return this.source.contents
     }
 }
