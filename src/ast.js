@@ -27,7 +27,7 @@ const astBuilder = plumbGrammar.createSemantics().addOperation("ast", {
     VariableDec(prototype, id, assignment, expression){
         return new core.VariableDec(
             prototype.sourceString, 
-            id.sourceString, 
+            id.ast(), 
             assignment.ast(), 
             expression.ast()
         )
@@ -35,15 +35,15 @@ const astBuilder = plumbGrammar.createSemantics().addOperation("ast", {
     Assignment(self, _dot, id, assignment, expression){
         return new core.Assignment(
             self.sourceString[0] ?? null, 
-            id.sourceString, 
-            assignment.sourceString, 
+            id.ast(), 
+            assignment.ast(), 
             expression.ast()
         )
     },
     FunctionDec(prototype, _func, id, _lp, parameters, _rp, block){
         return new core.FunctionDec(
             prototype.sourceString,
-            id.sourceString,
+            id.ast(),
             parameters.asIteration().ast(),
             block.ast()
         )
@@ -53,22 +53,22 @@ const astBuilder = plumbGrammar.createSemantics().addOperation("ast", {
     },
     PrototypeDec(_proto, id, block){
         return new core.PrototypeDec(
-            id.sourceString, 
+            id.ast(), 
             block.ast()
         )
     },
     AttributeDec(_atr, prototype, id, assignment, expression){
         return new core.AttributeDec(
             prototype.sourceString, 
-            id.sourceString, 
-            assignment.sourceString, 
+            id.ast(), 
+            assignment.ast(), 
             expression.ast()
         )
     },
     MethodDec(_atr, prototype, _func, id, _lp, parameters, _rp, block){
         return new core.MethodDec(
             prototype.sourceString,
-            id.sourceString,
+            id.ast(),
             parameters.asIteration().ast(),
             block.ast()
         )
@@ -102,7 +102,7 @@ const astBuilder = plumbGrammar.createSemantics().addOperation("ast", {
     ListDec(prototype, id, assignment, _pipe0, list, _pipe1){
         return new core.ListDec(
             prototype.sourceString, 
-            id.sourceString,
+            id.ast(),
             assignment.sourceString, 
             list.asIteration().ast()
         )
@@ -116,7 +116,7 @@ const astBuilder = plumbGrammar.createSemantics().addOperation("ast", {
     MapDec(prototype, id, assignment, _wall0, map, _wall1){
         return new core.MapDec(
             prototype.sourceString,
-            id.sourceString,
+            id.ast(),
             assignment.sourceString,
             map.asIteration().ast()
         )
@@ -206,14 +206,14 @@ const astBuilder = plumbGrammar.createSemantics().addOperation("ast", {
     Exp7_Method(left, _dot, id, _lp, args, _rp){
         return new core.MethodExpression(
             left.ast(),
-            id.sourceString,
+            id.ast(),
             args.asIteration().ast()
         )
     },
-    Exp7_Attribute(left, _dot, id){
-        return new core.AttributeExpression(
+    Exp7_Access(left, _dot, id){
+        return new core.AccessExpression(
             left.ast(),
-            id.sourceString
+            id.ast()
         )
     },
     Exp8_Expression(_lp, exp, _rp){
@@ -239,6 +239,12 @@ const astBuilder = plumbGrammar.createSemantics().addOperation("ast", {
     },
     id(_letter, _rest){
         return new core.Token("Id", this.source)
+    },
+    prototype_ListProto(_lp, _proto, _rp){
+        return new core.Token(this.sourceString, this.source)
+    },
+    prototype_MapProto(_lw, _proto, _rw){
+        return new core.Token(this.sourceString, this.source)
     },
     Pipelines(_pipeline, _lb, pipes, _rb){
         return new core.Pipelines(

@@ -240,16 +240,16 @@ export class Call {
     }
 }
 
-export class AttributeExpression {
-    constructor(prototype, attribute){
-        this.prototype = prototype
+export class AccessExpression {
+    constructor(object, attribute){
+        this.object = object
         this.attribute = attribute
     }
 }
 
 export class MethodExpression {
-    constructor(prototype, method, args){
-        this.prototype = prototype
+    constructor(object, method, args){
+        this.object = object
         this.method = method
         this.args = args
     }

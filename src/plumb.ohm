@@ -57,7 +57,7 @@ Plumb {
     Exp7 = Exp7 "[" Expression "]" -- Index
     		  | Exp7 "(" ListOf<Expression, ","> ")" -- Call
               | Exp7 "." id "(" ListOf<Expression, ","> ")"  -- Method
-              | Exp7 "." id -- Attribute
+              | Exp7 "." id -- Access
               | Exp8
     Exp8 = rational
     	 | integer
@@ -76,8 +76,8 @@ Plumb {
     break = "break" ~idchar
     self = "self" ~idchar
     doesnotexist = (none | all)
-    none = "None" ~idchar
-    all = "All" ~idchar
+    none = "none" ~idchar
+    all = "all" ~idchar
     function = "FUNC" ~idchar
     definition = "Definitions" ~idchar
     pipeline = "Pipelines" ~idchar

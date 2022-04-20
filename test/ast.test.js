@@ -92,48 +92,48 @@ const expected = `   1 | Program imports=#2 definition=#3 pipeline=#47
    2 | ImportDec path='"./test_path"'
    3 | Definitions block=#4
    4 | Block statements=[#5,#10,#12,#14,#15,#19,#29,#31,#32,#33,#34,#36,#41,#42,#46]
-   5 | VariableDec prototype='INT' id='a' assignment=(Sym,"<==") expression=#6
+   5 | VariableDec prototype='INT' id=(Id,"a") assignment=(Sym,"<==") expression=#6
    6 | BinaryExpression left=#7 op='-' right=#8
    7 | BinaryExpression left=(INT,"7") op='+' right=(INT,"2")
    8 | BinaryExpression left=#9 op='+' right=(INT,"4")
    9 | UnaryExpression op='-' right=(INT,"3")
-  10 | VariableDec prototype='INT' id='b' assignment=(Sym,"<==") expression=#11
+  10 | VariableDec prototype='INT' id=(Id,"b") assignment=(Sym,"<==") expression=#11
   11 | BinaryExpression left=(INT,"8") op='*' right=(INT,"4")
-  12 | VariableDec prototype='RAT' id='c' assignment=(Sym,"<==") expression=#13
+  12 | VariableDec prototype='RAT' id=(Id,"c") assignment=(Sym,"<==") expression=#13
   13 | BinaryExpression left=(INT,"7") op='/' right=(INT,"2")
-  14 | VariableDec prototype='STR' id='d' assignment=(Sym,"<==") expression=(STR,""ka"")
-  15 | FunctionDec prototype='STR' id='e' parameters=[(STR Parameter,"STR f")] block=#16
+  14 | VariableDec prototype='STR' id=(Id,"d") assignment=(Sym,"<==") expression=(STR,""ka"")
+  15 | FunctionDec prototype='STR' id=(Id,"e") parameters=[(STR Parameter,"STR f")] block=#16
   16 | Block statements=[#17]
   17 | ReturnStatement expression=#18
   18 | BinaryExpression left=(Id,"f") op='+' right=(STR,""boom"")
-  19 | PrototypeDec id='G' block=#20
+  19 | PrototypeDec id=(Id,"G") block=#20
   20 | Block statements=[#21,#22,#25]
-  21 | AttributeDec prototype='STR' id='h' assignment='<== 2' expression=[(INT,"2")]
-  22 | FunctionDec prototype='G' id='G' parameters=[(STR Parameter,"STR x")] block=#23
+  21 | AttributeDec prototype='STR' id=(Id,"h") assignment=[(Sym,"<==")] expression=[(INT,"2")]
+  22 | FunctionDec prototype='G' id=(Id,"G") parameters=[(STR Parameter,"STR x")] block=#23
   23 | Block statements=[#24]
-  24 | Assignment self='s' id='h' assignment='<==' expression=(Id,"h")
-  25 | MethodDec prototype='STR' id='getH' parameters=[] block=#26
+  24 | Assignment self='s' id=(Id,"h") assignment=(Sym,"<==") expression=(Id,"h")
+  25 | MethodDec prototype='STR' id=(Id,"getH") parameters=[] block=#26
   26 | Block statements=[#27]
   27 | ReturnStatement expression=#28
-  28 | AttributeExpression prototype=(Self,"self") attribute='h'
-  29 | VariableDec prototype='G' id='i' assignment=(Sym,"<==") expression=#30
+  28 | AccessExpression object=(Self,"self") attribute=(Id,"h")
+  29 | VariableDec prototype='G' id=(Id,"i") assignment=(Sym,"<==") expression=#30
   30 | Call id=(Id,"G") args=[(STR,""this is a good sentence"")]
-  31 | ListDec prototype='||DNE||' id='j' assignment='<==' list=[(INT,"1"),(RAT,"1.02"),(STR,""bob""),(Id,"i"),(BOOL,"true"),(Id,"empty")]
-  32 | MethodExpression prototype=(Id,"j") method='append' args=[(Id,"d")]
-  33 | ListDec prototype='||INT||' id='k' assignment='<==' list=[(INT,"1"),(INT,"2"),(INT,"5"),(INT,"7"),(INT,"73"),(INT,"45")]
-  34 | MethodExpression prototype=(Id,"k") method='remove' args=[#35]
-  35 | MethodExpression prototype=(Id,"k") method='search' args=[(INT,"7")]
-  36 | MapDec prototype='<<DNE>>' id='l' assignment='<==' map=[#37,#38,#40]
+  31 | ListDec prototype='||DNE||' id=(Id,"j") assignment='<==' list=[(INT,"1"),(RAT,"1.02"),(STR,""bob""),(Id,"i"),(BOOL,"true"),(Id,"empty")]
+  32 | MethodExpression object=(Id,"j") method=(Id,"append") args=[(Id,"d")]
+  33 | ListDec prototype='||INT||' id=(Id,"k") assignment='<==' list=[(INT,"1"),(INT,"2"),(INT,"5"),(INT,"7"),(INT,"73"),(INT,"45")]
+  34 | MethodExpression object=(Id,"k") method=(Id,"remove") args=[#35]
+  35 | MethodExpression object=(Id,"k") method=(Id,"search") args=[(INT,"7")]
+  36 | MapDec prototype='<<DNE>>' id=(Id,"l") assignment='<==' map=[#37,#38,#40]
   37 | KeyValuePair key=(STR,""name"") value=(STR,""lasagna"")
   38 | KeyValuePair key=(STR,""color"") value=#39
   39 | Call id=(Id,"G") args=[(STR,""red"")]
   40 | KeyValuePair key=(STR,""height"") value=(INT,"12")
-  41 | MethodExpression prototype=(Id,"l") method='add' args=[(STR,""awesome""),(BOOL,"true")]
-  42 | MapDec prototype='<<INT>>' id='m' assignment='<==' map=[#43,#44,#45]
+  41 | MethodExpression object=(Id,"l") method=(Id,"add") args=[(STR,""awesome""),(BOOL,"true")]
+  42 | MapDec prototype='<<INT>>' id=(Id,"m") assignment='<==' map=[#43,#44,#45]
   43 | KeyValuePair key=(STR,""horsepower"") value=(INT,"1200")
   44 | KeyValuePair key=(STR,""price"") value=(INT,"270000")
   45 | KeyValuePair key=(STR,""model_number"") value=(INT,"79")
-  46 | MethodExpression prototype=(Id,"m") method='remove' args=[(STR,""price"")]
+  46 | MethodExpression object=(Id,"m") method=(Id,"remove") args=[(STR,""price"")]
   47 | Pipelines pipes=[#48,#49,#51,#52,#53,#55,#56,#58]
   48 | Pipe inputs=[(Id,"a"),(Id,"b"),(Id,"c")] op='-->' nextPipe=(Id,"print")
   49 | Pipe inputs=[(Id,"d")] op='-->' nextPipe=#50
@@ -150,22 +150,22 @@ const expected = `   1 | Program imports=#2 definition=#3 pipeline=#47
 const expected1 = `   1 | Program imports=null definition=#2 pipeline=#21
    2 | Definitions block=#3
    3 | Block statements=[#4]
-   4 | FunctionDec prototype='||INT||' id='denominate' parameters=[(INT Parameter,"INT total")] block=#5
+   4 | FunctionDec prototype='||INT||' id=(Id,"denominate") parameters=[(INT Parameter,"INT total")] block=#5
    5 | Block statements=[#6,#7,#9,#11,#13,#15,#17,#19,#20]
-   6 | VariableDec prototype='INT' id='current_total' assignment=(Sym,"<==") expression=(Id,"total")
-   7 | VariableDec prototype='INT' id='quarters' assignment=(Sym,"<==") expression=#8
+   6 | VariableDec prototype='INT' id=(Id,"current_total") assignment=(Sym,"<==") expression=(Id,"total")
+   7 | VariableDec prototype='INT' id=(Id,"quarters") assignment=(Sym,"<==") expression=#8
    8 | BinaryExpression left=(Id,"current_total") op='%' right=(INT,"25")
-   9 | Assignment self=null id='current_total' assignment='<--' expression=#10
+   9 | Assignment self=null id=(Id,"current_total") assignment=(Sym,"<--") expression=#10
   10 | BinaryExpression left=(INT,"25") op='*' right=(Id,"quarters")
-  11 | VariableDec prototype='INT' id='dimes' assignment=(Sym,"<==") expression=#12
+  11 | VariableDec prototype='INT' id=(Id,"dimes") assignment=(Sym,"<==") expression=#12
   12 | BinaryExpression left=(Id,"current_total") op='%' right=(INT,"10")
-  13 | Assignment self=null id='current_total' assignment='<--' expression=#14
+  13 | Assignment self=null id=(Id,"current_total") assignment=(Sym,"<--") expression=#14
   14 | BinaryExpression left=(INT,"10") op='*' right=(Id,"dimes")
-  15 | VariableDec prototype='INT' id='nickels' assignment=(Sym,"<==") expression=#16
+  15 | VariableDec prototype='INT' id=(Id,"nickels") assignment=(Sym,"<==") expression=#16
   16 | BinaryExpression left=(Id,"total") op='%' right=(INT,"5")
-  17 | Assignment self=null id='current_total' assignment='<--' expression=#18
+  17 | Assignment self=null id=(Id,"current_total") assignment=(Sym,"<--") expression=#18
   18 | BinaryExpression left=(INT,"5") op='*' right=(Id,"nickels")
-  19 | ListDec prototype='||INT||' id='result' assignment='<==' list=[(Id,"quarters"),(Id,"dimes"),(Id,"nickels"),(Id,"current_total")]
+  19 | ListDec prototype='||INT||' id=(Id,"result") assignment='<==' list=[(Id,"quarters"),(Id,"dimes"),(Id,"nickels"),(Id,"current_total")]
   20 | ReturnStatement expression=(Id,"result")
   21 | Pipelines pipes=[#22]
   22 | Pipe inputs=[(Id,"INPUT")] op='-1->' nextPipe=#23
@@ -175,11 +175,11 @@ const expected1 = `   1 | Program imports=null definition=#2 pipeline=#21
 const expected2 = `   1 | Program imports=null definition=#2 pipeline=null
    2 | Definitions block=#3
    3 | Block statements=[#4,#5,#6,#8,#12]
-   4 | ListDec prototype='||RAT||' id='y' assignment='<==' list=[]
-   5 | ListDec prototype='||INT||' id='x' assignment='<==' list=[(INT,"1"),(INT,"2")]
-   6 | Assignment self=null id='y' assignment='<++' expression=#7
+   4 | ListDec prototype='||RAT||' id=(Id,"y") assignment='<==' list=[]
+   5 | ListDec prototype='||INT||' id=(Id,"x") assignment='<==' list=[(INT,"1"),(INT,"2")]
+   6 | Assignment self=null id=(Id,"y") assignment=(Sym,"<++") expression=#7
    7 | ListExp prototype='||INT||' list=[(INT,"3"),(INT,"4")]
-   8 | Assignment self=null id='y' assignment='<++' expression=#9
+   8 | Assignment self=null id=(Id,"y") assignment=(Sym,"<++") expression=#9
    9 | MapExp prototype='<<INT>>' map=[#10,#11]
   10 | KeyValuePair key=(STR,""bob"") value=(INT,"3")
   11 | KeyValuePair key=(STR,""job"") value=(INT,"4")
@@ -189,18 +189,17 @@ const expected2 = `   1 | Program imports=null definition=#2 pipeline=null
 const expected3 = `   1 | Program imports=null definition=#2 pipeline=null
    2 | Definitions block=#3
    3 | Block statements=[#4]
-   4 | VariableDec prototype='BOOL' id='x' assignment=(Sym,"<==") expression=#5
+   4 | VariableDec prototype='BOOL' id=(Id,"x") assignment=(Sym,"<==") expression=#5
    5 | BinaryExpression left=#6 op='and' right=#8
    6 | BinaryExpression left=#7 op='and' right=(BOOL,"true")
    7 | Call id=(Id,"is_odd") args=[(INT,"23")]
    8 | BinaryExpression left=#9 op='>' right=#10
-   9 | AttributeExpression prototype=(Sym,"INT") attribute='MAX'
+   9 | AccessExpression object=(Sym,"INT") attribute=(Id,"MAX")
   10 | IndexExpression object=#11 index=(INT,"0")
   11 | ListExp prototype='||INT||' list=[#12]
-  12 | AttributeExpression prototype=(Sym,"INT") attribute='MIN'`
+  12 | AccessExpression object=(Sym,"INT") attribute=(Id,"MIN")`
 
 describe("The AST generator", () => {
-  console.log(ast(source4))
   it("produces a correct AST", () => {
     assert.deepStrictEqual(util.format(ast(source)), expected)
   })
