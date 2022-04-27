@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/plumb_logo.png" width="40%">
+  <img src="./plumb_logo.png" width="40%">
 </p>
 
 # Plumb
