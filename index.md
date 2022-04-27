@@ -10,213 +10,90 @@ This language is focused on making it easier to focus on and interact with the "
 - Visually Rigid for Ease of Readability
 - Strong parallel operation support
 
-Below is an in-depth view of Plumb with a comparison to equivalent code in JavaScript
-
-## Built-in Overview
-
-### Comments
-`:: pseudocode goes here ::`
-They can go anywhere in the language, including in between, and in, statements and pipes!
-Disclaimer: There are no single line comments in Plumb, the default comment is multi-line
-
-### Keywords
-|Keyword|Description|
-|-------|-----------|
-|`Definitions`|Used to specify the next block for holding statements and expressions|
-|`Pipelines`|Used to specify the next block for holding pipes|
-|`return`|Used to specify when a function has reached a terminal state in its operation and what value to receive from it in a call|
-|`if`|Used to specify the next block with a conditional|
-|`else`|Used after an `if` specified block, `else` is used to specify the next block as the previous `if`'s false condition path|
-|`for`|Used to specify how many finite loops happen over a specified block|
-|`while`|Used to specify a halt condition over a specified block with an unknown number of loops|
-|`print`|Used to output to the command line|
-|`OP`|Used for overloading operator functionality into prototypes|
-|`INPUT`|Used to represent commandline arguments, as a plumb list, in the `Pipelines` block|
-|`DNE`|Type used to represent no, or any, type|
-|`BOOL`|Type used to represent booleans|
-|`INT`|Type used to represent integers|
-|`RAT`|Type used to represent rationals|
-|`STR`|Type used to represent strings|
-|`FUNC`|Type used to represent functions|
-|`PROTO`|Type used to represent prototypes|
-|`ATR`|Type used to represent prototype attributes|
-
-### Data Types
-|Type|Values|JavaScript|
-|----|------|----------|
-|Does not exist `DNE`|`empty`|Null `null`|
-|Boolean `BOOL`|`true`, `false`|Boolean `true` `false`|
-|Integers `INT`|`12`, `79`, `99999`|BigInt `1223345n`|
-|Rationals `RAT`|`3.97385`, `7895.2734`|Number `99465.213`|
-|String `STR`|`"carrot"`, `"bob"`|String `"phrase"`|
-|Function `FUNC`| See code examples |Object\function|
-|Prototype `PROTO`| See code examples |Class|
-
-### Data Structures
-|Structure|Syntax|JavaScript|
-|---|---|---|
-|Lists| `\|\| a , b , c \|\|` | `[ a , b , c ]` |
-|Maps| `<< a : x , b : y >>` | `{ a : x , b : y }` |
-
-### Operators and Precedence 
-|Operator|Symbol|Operational Types|Precedence|Associativity|
-|--------|------|-----------------|:------:|:----:|
-|Attributor|`.`|Prototypes|1|L to R|
-|Indexer|`[]`|Prototypes|1| \| |
-|Call|`()`|Functions|1| \| |
-|Negation|`!`|Boolean|2|R to L|
-|Negation|`-`|Integers, Rationals|2| \| |
-|Exponentiation|`^`|Integers, Rationals|3| \| |
-|Multiplication|`*`|Integers, Rationals, String|4| L to R |
-|Division|`/`|Integers, Rationals|4| \| |
-|Modulus|`%`|Integers, Rationals|4| \| |
-|Addition|`+`|Integers, Rationals, String|5| \| |
-|Subtraction|`-`|Integers, Rationals|5| \| |
-|Less Than|`<`|Integers, Rationals|6|None|
-|Less Than or equal|`<=`|Integers, Rationals|6| \| |
-|Greater Than|`>`|Integers, Rationals|6| \| |
-|Greater Than or equal|`>=`|Integers, Rationals|6| \| |
-|Equality|`==`|Boolean, Integers, Rationals|7| \| |
-|Inequality|`!=`|Boolean, Integers, Rationals|7| \| |
-|Logical AND|`and`|Boolean|8| \| |
-|Logical OR|`or`|Boolean|9| \| |
-|Assignment by Expression|`<==`|Boolean, Integers, Rationals, String, Prototype Instance|10|R to L|
-|Assignment by Addition|`<++`|Integers, Rationals, String|10| \| |
-|Assignment by Subtraction|`<--`|Integers, Rationals|10| \| |
-|Assignment by Multiplication|`<**`|Integers, Rationals, String|10| \| |
-|Assignment by Division|`<//`|Integers, Rationals|10| \| |
-|Assignment by Modulus|`<%%`|Integers, Rationals|10| \| |
-
-Note: Prototypes can use the operator (`OP`) key word to adapt functionality
-
-### Pipeline Operators
-|Operator|Syntax|Description|
-|----|------|----------|
-|Injection|a, b, c, ... `-->` target|Takes an arbitrary number of instances on the left and, from left to right, pushes them into the next operation on a pipe|
-|Drain|Prototype `-#-#-...->` target|Similar to dot notation, takes a object and takes a copy of the specified attribute "#" and pushes it into the next operation on a pipe. If there are multiple objects to the left of the drain, successively add more attributes to match the number of instances at which point each attribute will specify what it being drained from its corresponding instance|
-|Caster|a, b, c, ... `-(` type `)->` target|Takes an arbitrary number of instances on the left and, from left to right, casts them to the specified cast-able type, or cast-able protocol, and pushes them into the next operation|
-|Factory|a, b, c, ... `--<(` pipe|Takes an arbitrary number of instances on the left and, for each instance, will create a new pipe for that instance to be pushed into that is a duplication of the rest of the pipe that comes after this operator|
-
-### Functions
-|Type|Name|Syntax|Description|
-|---|---|---|---|
-|DNE|Caster| `type( to_be_casted , cast_type )` |Takes any instance of any type and attempts to cast it to another|
-|DNE|Printer| `print( a, b, c, ... )` |Takes any amount of instances of any type and attempts to cast print them to the commandline|
-|STR|Uppercase|`STR.uppercase( string_to_uppercase )`|Takes a single String instance and attempts to replace all lowercase characters with their capitalized counterparts|
-|STR|Character Count|`STR.c_length( string_to_measure )`|Takes a single String instance and returns the number of, unicode safe, characters in it|
-
-<table>
-<tr> <th> Plumb </th> <th> JavaScript </th> </tr>
-<tr>
-<td>
-
+## 5 Example Programs
 ```
+::
+This is a small program that takes inputs off the command line, capitilizes them, and prints them
+::
 Definitions {
-    INT a <== 7+2-(-3+4)
-    INT b <== 8*4
-    RAT c <== 7/2
-    STR d <== "ka"
-    STR FUNC e ( STR f ) {
-        return f + "boom"
+    STR FUNC capitilize(STR word) {
+        return STR.uppercase(word)
     }
-    PROTO G {
-        ATR STR h
-        G FUNC G( STR x ){
-            self.h <== h
-        }
-        ATR STR FUNC getH(){
-        	return self.h
-        }
-    }
-    G i <== G("this is a good sentence")
-    ||DNE|| j <== || 1, 1.02, "bob", i, true, empty ||
-    j.append(d)
-    ||INT|| k <== || 1, 2, 5, 7, 73, 45 ||
-    k.remove(k.search(7))
-    <<DNE>> l <== << "name" : "lasagna" , "color" : G("red"), "height" : 12 >> 
-    l.add( "awesome", true )
-    <<INT>> m <== << "horsepower" : 1200, "price" : 270000 , "model_number" : 79 >> 
-    m.remove("price")
-} Pipelines {
-    a, b, c --> print
-    d --> e --> print
-    i -h-> print
-    j --> print
-    k --<( a --> print
-    l --> print
-    m --<( a --> print
-}
-```
-
-</td> 
-<td>
-
-```javascript
-var a = 7+2-(-3+4)
-var b = 8*4
-var c = 7/2
-var d = "ka"
-function e (f) {
-    return f + "boom"
-}
-class G {
-    h
-    constructor(x){
-        this.h = x
-    }
-    getH() {
-        return this.h
-    }
-}
-var i = new G("this is a good sentence")
-var j = [ 1, 1.02, "bob", i, true, null ]
-j.push(d)
-var k = [ 1, 2, 5, 7, 73, 45 ]
-k.splice(k.indexOf(7), 1)
-var l = { name : "lasagna" , color : new G("red"), height : 12 }
-Object.assign(l, { awesome : true })
-var m = { "horsepower" : 1200, "price" : 270000 , "model_number" : 79 }
-delete m.price
-console.log(a, b, c)
-console.log(e(d))
-console.log(i.h)
-console.log(j)
-for ( x in k ){
-    console.log(x)
-}
-console.log(l)
-for ( (x, y) in m ){
-    console.log(x, y)
-}
-```
-
-</td>
-</tr>
-</table>
-
-## Plumb vs JavaScript Examples
-
-#### Default Program
-Plumb
-```
-Definitions {}
-Pipelines {}
-```
-Javascript
-```
-```
-
-#### Hello World!
-Plumb
-```
-Definitions {
-    STR x <== "Hello World!"
 }
 Pipelines {
-    x --> print
+    INPUT --<( -(STR)-> capitilize --> print
 }
 ```
-JavaScript
-```javascript
-console.log("Hello World!")
+```
+::
+This program makes use of the "factory" operator to quickly create parallel pipes for
+preforming arithmetic over an array of rationals
+::
+Definitions {
+    ||RAT|| to_be_divided <== || 23.7, 8.0, 983, 74.07, 96.6, 12.983 ||
+    RAT FUNC divide_by_3(RAT x) {
+        return x / 3
+    }
+}
+Pipelines {
+    to_be_divided --<( --> divide_by_3 --> print
+}
+```
+```
+::
+This program prints successive powers of a specified base up to some limit pulled from the commandline arguments
+::
+Definitions {
+    INT FUNC powers(INT base, INT limit) {
+        INT value <== 1
+        while(value <= limit){
+            print(value)
+            value <** base
+        }
+    }
+}
+Pipelines {
+    INPUT, INPUT -1-2-> -(INT)-> powers
+}
+```
+```
+:: 
+This program takes an input off the commandline, casts it to an INT type,
+and denominates it into the smallest number of US coins.
+::
+Definitions {
+    ||INT|| FUNC denominate(INT total) {
+        INT current_total <== total
+        INT quarters <== current_total % 25
+        current_total <-- 25 * quarters
+        INT dimes <== current_total % 10
+        current_total <-- 10 * dimes
+        INT nickels <== total % 5
+        current_total <-- 5 * nickels
+        return ||quarters, dimes, nickels, current_total||
+    }
+}
+Pipelines {
+    INPUT -1-> -(INT)-> denominate --> print
+}
+```
+```
+::
+This program takes an input word off the commandline and stretches it
+proportional to its character length
+::
+Definitions {
+    STR FUNC stretched(STR word) {
+        INT counter <== 0
+        STR stretched_word <== ""
+        while(counter < STR.c_length(word)) {
+            stretched_word + (word[counter]*(counter+1))
+            counter <++ 1
+        }
+        return stretched_word
+    } 
+}
+Pipelines {
+    INPUT -1-> -(STR)-> stretched --> print
+}
 ```
