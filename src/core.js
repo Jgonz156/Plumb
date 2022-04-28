@@ -63,6 +63,20 @@ export class FunctionObj {
     }
 }
 
+export class TypeParameterPairDec {
+    constructor(prototype, id){
+        this.prototype = prototype
+        this.id = id
+    }
+}
+
+export class TypeParameterPairObj {
+    constructor(prototype, id){
+        this.prototype = prototype
+        this.id = id
+    }
+}
+
 export class PrototypeDec {
     constructor(id, block){
         this.id = id
@@ -76,7 +90,7 @@ export class PrototypeObj {
     static integer = new PrototypeObj("INT")
     static string = new PrototypeObj("STR")
     static doesNotExist = new PrototypeObj("DNE")
-    constructor(id, attributes, methods){
+    constructor(id, attributes = [], methods = []){
         this.id = id
         this.attributes = attributes
         this.methods = methods
@@ -164,8 +178,8 @@ export class ListExp {
 
 export class ListPrototypeObj extends PrototypeObj {
     constructor(prototype){
-        super(`||${prototype}||`)
-        this.basePrototype = prototype
+        super(prototype)
+        this.basePrototype = prototype.slice(2, prototype.length-2)
     }
 }
 
@@ -187,8 +201,8 @@ export class MapExp {
 
 export class MapPrototypeObj extends PrototypeObj {
     constructor(prototype){
-        super(`<<${prototype}>>`)
-        this.basePrototype = prototype
+        super(prototype)
+        this.basePrototype = prototype.slice(2, prototype.length-2)
     }
 }
 

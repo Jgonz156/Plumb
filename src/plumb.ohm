@@ -1,5 +1,5 @@
 Plumb {
-	Program = ("\n")* Import* ("\n")* Definitions? ("\n")* Pipelines? ("\n")* end
+     Program = ("\n")* Import* ("\n")* Definitions? ("\n")* Pipelines? ("\n")* end
     Import = ("\n")* "import" string ("\n")*
     Definitions = definition Block
     Statement = ("\n")* Statement ("\n")* -- Newlines
@@ -21,11 +21,11 @@ Plumb {
               | Exp7
     VariableDec = (prototype | id) id assignment Expression
     Assignment = (self".")? id assignment Expression
-    FunctionDec = (prototype | id) function id "(" ListOf<typeParameterPair, ","> ")" Block
-    typeParameterPair = (prototype|id) space id
+    FunctionDec = (prototype | id) function id "(" ListOf<TypeParameterPairDec, ","> ")" Block
+    TypeParameterPairDec = (prototype|id) id
     PrototypeDec = "PROTO" id Block
     AttributeDec = "ATR" (prototype | id) id (assignment Expression)?
-    MethodDec = "ATR" (prototype | id) function id "(" ListOf<typeParameterPair, ","> ")" Block
+    MethodDec = "ATR" (prototype | id) function id "(" ListOf<TypeParameterPairDec, ","> ")" Block
     IfStatement = if "(" Expression ")" Block
     WhileStatement = while "(" Expression ")" Block
     ForStatement = for "(" Statement ":" Expression ":" Statement ")" Block

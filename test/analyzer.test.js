@@ -5,56 +5,69 @@ import * as core from "../src/core.js"
 
 // Programs that are semantically correct
 const semanticChecks = [
-  //["integer variable declaration", 'Definitions{INT x <== 683}'],
-  //["rational variable declaration", 'Definitions{RAT x <== 1.1234}'],
-  //["boolean variable declaration", 'Definitions{BOOL x <== false}'],
-  //["string variable declaration", 'Definitions{STR x <== "carrot"}'],
-  //["dne variable declaration", 'Definitions{DNE x <== none}'],
-  //["dne variable declaration", 'Definitions{DNE x <== all}'],
+  ["integer variable declaration", 'Definitions{INT x <== 683}'],
+  ["rational variable declaration", 'Definitions{RAT x <== 1.1234}'],
+  ["boolean variable declaration", 'Definitions{BOOL x <== false}'],
+  ["string variable declaration", 'Definitions{STR x <== "carrot"}'],
+  ["dne variable declaration", 'Definitions{DNE x <== none}'],
+  ["dne variable declaration", 'Definitions{DNE x <== all}'],
   ["complex integer variable declaration", 'Definitions{INT x <== 683 + 2}'],
+  //["complex array types", "function f(x: [[[int?]]?]) {}"],
+  //["increment and decrement", "let x = 10; x--; x++;"],
+  ["initialize with empty array declaration", "Definitions{||INT|| x <== ||||}"],
+  //["type declaration", "Definitions{PROTO BOX{ATR INT volume\nBOX FUNC BOX(INT volume){self.volume <== volume}}}"],
+  ["assign arrays", "Definitions{||INT|| x <== ||1,2,3||}"],
+  ["assign to array element", "Definitions{||INT|| x <== ||||\n x.append(2)}"],
+  //["initialize with empty optional", "let a = no int;"],
+  ["short return", "Definitions{STR FUNC boberino(STR x){return}}"],
+  ["long return", "Definitions{STR FUNC boberino(STR x){return x}}"],
+  //["assign optionals", "let a = no int;let b=some 1;a=b;b=a;"],
+  ["return in nested if", "Definitions{STR FUNC boberino(STR x){if(true){return x}}}"],
+  ["break in nested if", "Definitions{while(true){if(true){break}}}"],
+  ["short if", "Definitions{if(true){INT x <== 2}}"],
+  //["else if", "if true {print(1);} else if true {print(0);} else {print(3);}"],
+  //["for over collection", "for i in [2,3,5] {print(1);}"],
+  ["for loop", "Definitions{for(INT x <== 0 : x<10 : x<++1){print(45)}}"],
+  //["repeat", "repeat 3 {let a = 1; print(a);}"],
+  //["conditionals with ints", "print(true ? 8 : 5);"],
+  //["conditionals with floats", "print(1<2 ? 8.0 : -5.22);"],
+  //["conditionals with strings", 'print(1<2 ? "x" : "y");'],
+  //["??", "print(some 5 ?? 0);"],
+  //["nested ??", "print(some 5 ?? 8 ?? 0);"],
+  ["||", "Definitions{print(true or false)}"],
+  ["&&", "Definitions{print(true and false)}"],
+  //["bit ops", "print((1&2)|(9^3));"],
+  ["relations", 'Definitions{print((4<5 and 2<=2) and (10>2 and 2>=2))}'],
+  //["ok to == arrays", "print([1]==[5,8]);"],
+  //["ok to != arrays", "print([1]!=[5,8]);"],
+  //["shifts", "print(1<<3<<5<<8>>2>>0);"],
+  ["arithmetic", "Definitions{INT x <== ((232-54+23*7)^8) % 2000}"],
+  //["array length", "print(#[1,2,3]);"],
+  //["optional types", "let x = no int; x = some 100;"],
+  ["variables", "Definitions{INT x <== 2 \n print(x)}"],
+  //["recursive structs", "struct S {z: S?} let x = S(no S);"],
+  //["nested structs", "struct T{y:int} struct S{z: T} let x=S(T(1)); print(x.z.y);"],
+  [
+     "member exp", 
+     `Definitions {
+        PROTO BOX {
+            ATR INT volume
+            BOX FUNC BOX(INT volume) {
+                self.volume <== volume
+            }
+        }
+        BOX x <== BOX(5)
+        print(x.volume)
+      }
+    `
+    ],
+  ["subscript exp", "Definitions{||INT|| x <== ||1,2,3|| \n print(x[0])}"],
+  //["array of struct", "struct S{} let x=[S(), S()];"],
+  //["struct of arrays and opts", "struct S{x: [int] y: string??}"],
+  //["assigned functions", "function f() {}\nlet g = f;g = f;"],
+  //["call of assigned functions", "function f(x: int) {}\nlet g=f;g(1);"],
+  //["type equivalence of nested arrays", "function f(x: [[int]]) {} print(f([[1],[2]]));"],
   /*
-  ["complex array types", "function f(x: [[[int?]]?]) {}"],
-  ["increment and decrement", "let x = 10; x--; x++;"],
-  ["initialize with empty array", "let a = [](of int);"],
-  ["type declaration", "struct S {f: (int)->boolean? g: string}"],
-  ["assign arrays", "let a = [](of int);let b=[1];a=b;b=a;"],
-  ["assign to array element", "const a = [1,2,3]; a[1]=100;"],
-  ["initialize with empty optional", "let a = no int;"],
-  ["short return", "function f() { return; }"],
-  ["long return", "function f(): boolean { return true; }"],
-  ["assign optionals", "let a = no int;let b=some 1;a=b;b=a;"],
-  ["return in nested if", "function f() {if true {return;}}"],
-  ["break in nested if", "while false {if true {break;}}"],
-  ["long if", "if true {print(1);} else {print(3);}"],
-  ["else if", "if true {print(1);} else if true {print(0);} else {print(3);}"],
-  ["for over collection", "for i in [2,3,5] {print(1);}"],
-  ["for in range", "for i in 1..<10 {print(0);}"],
-  ["repeat", "repeat 3 {let a = 1; print(a);}"],
-  ["conditionals with ints", "print(true ? 8 : 5);"],
-  ["conditionals with floats", "print(1<2 ? 8.0 : -5.22);"],
-  ["conditionals with strings", 'print(1<2 ? "x" : "y");'],
-  ["??", "print(some 5 ?? 0);"],
-  ["nested ??", "print(some 5 ?? 8 ?? 0);"],
-  ["||", "print(true||1<2||false||!true);"],
-  ["&&", "print(true&&1<2&&false&&!true);"],
-  ["bit ops", "print((1&2)|(9^3));"],
-  ["relations", 'print(1<=2 && "x">"y" && 3.5<1.2);'],
-  ["ok to == arrays", "print([1]==[5,8]);"],
-  ["ok to != arrays", "print([1]!=[5,8]);"],
-  ["shifts", "print(1<<3<<5<<8>>2>>0);"],
-  ["arithmetic", "let x=1;print(2*3+5**-3/2-5%8);"],
-  ["array length", "print(#[1,2,3]);"],
-  ["optional types", "let x = no int; x = some 100;"],
-  ["variables", "let x=[[[[1]]]]; print(x[0][0][0][0]+2);"],
-  ["recursive structs", "struct S {z: S?} let x = S(no S);"],
-  ["nested structs", "struct T{y:int} struct S{z: T} let x=S(T(1)); print(x.z.y);"],
-  ["member exp", "struct S {x: int} let y = S(1);print(y.x);"],
-  ["subscript exp", "let a=[1,2];print(a[0]);"],
-  ["array of struct", "struct S{} let x=[S(), S()];"],
-  ["struct of arrays and opts", "struct S{x: [int] y: string??}"],
-  ["assigned functions", "function f() {}\nlet g = f;g = f;"],
-  ["call of assigned functions", "function f(x: int) {}\nlet g=f;g(1);"],
-  ["type equivalence of nested arrays", "function f(x: [[int]]) {} print(f([[1],[2]]));"],
   [
     "call of assigned function in expression",
     `function f(x: int, y: boolean): int {}
@@ -81,11 +94,11 @@ const semanticChecks = [
   ["types in function type", "function f(g: (int?, float)->string) {}"],
   ["voids in fn type", "function f(g: (void)->void) {}"],
   ["outer variable", "let x=1; while(false) {print(x);}"],
-  ["built-in constants", "print(25.0 * π);"],
-  ["built-in sin", "print(sin(π));"],
-  ["built-in cos", "print(cos(93.999));"],
-  ["built-in hypot", "print(hypot(-4.0, 3.00001));"],
   */
+  //["built-in constants", "print(25.0 * π);"],
+  //["built-in sin", "print(sin(π));"],
+  //["built-in cos", "print(cos(93.999));"],
+  //["built-in hypot", "print(hypot(-4.0, 3.00001));"],
 ]
 
 // Programs that are syntactically correct but have semantic errors
@@ -189,10 +202,10 @@ const semanticErrors = [
 describe("The analyzer", () => {
   for (const [scenario, source] of semanticChecks) {
     it(`recognizes ${scenario}`, () => {
-      console.log(ast(source))
+      //console.log(ast(source))
       let analyzedAst = analyze(ast(source))
       assert.ok(analyzedAst)
-      console.log(analyzedAst)
+      //console.log(analyzedAst)
     })
   }
   for (const [scenario, source, errorMessagePattern] of semanticErrors) {

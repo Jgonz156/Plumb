@@ -48,8 +48,11 @@ const astBuilder = plumbGrammar.createSemantics().addOperation("ast", {
             block.ast()
         )
     },
-    typeParameterPair(prototype, _space, id){
-        return new core.Token(`${prototype.sourceString} Parameter`, this.source)
+    TypeParameterPairDec(prototype, id){
+        return new core.TypeParameterPairDec(
+            prototype.sourceString,
+            id.ast()
+        )
     },
     PrototypeDec(_proto, id, block){
         return new core.PrototypeDec(
