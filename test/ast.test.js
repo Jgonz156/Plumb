@@ -178,17 +178,17 @@ const expected = `   1 | Program imports=#2 definition=#3 pipeline=#49
   47 | KeyValuePair key=(STR,""model_number"") value=(INT,"79")
   48 | MethodExpression object=(Id,"m") method=(Id,"remove") args=[(STR,""price"")]
   49 | Pipelines pipes=[#50,#51,#53,#54,#55,#57,#58,#60]
-  50 | Pipe inputs=[(Id,"a"),(Id,"b"),(Id,"c")] op='-->' nextPipe=(Id,"print")
-  51 | Pipe inputs=[(Id,"d")] op='-->' nextPipe=#52
-  52 | Pipe inputs=[(Id,"e")] op='-->' nextPipe=(Id,"print")
-  53 | Pipe inputs=[(Id,"i")] op='-h->' nextPipe=(Id,"print")
-  54 | Pipe inputs=[(Id,"j")] op='-->' nextPipe=(Id,"print")
-  55 | Pipe inputs=[(Id,"k")] op='--<(' nextPipe=#56
-  56 | Pipe inputs=[(Id,"a")] op='-->' nextPipe=(Id,"print")
-  57 | Pipe inputs=[(Id,"l")] op='-->' nextPipe=(Id,"print")
-  58 | Pipe inputs=[(Id,"m")] op='--<(' nextPipe=#59
-  59 | Pipe inputs=[(Id,"a")] op='-->' nextPipe=(Id,"print")
-  60 | Pipe inputs=[(Id,"a")] op='-(RAT)->' nextPipe=(Id,"print")`
+  50 | PipeDec inputs=[(Id,"a"),(Id,"b"),(Id,"c")] op='-->' nextPipe=(Id,"print")
+  51 | PipeDec inputs=[(Id,"d")] op='-->' nextPipe=#52
+  52 | PipeDec inputs=[(Id,"e")] op='-->' nextPipe=(Id,"print")
+  53 | PipeDec inputs=[(Id,"i")] op='-h->' nextPipe=(Id,"print")
+  54 | PipeDec inputs=[(Id,"j")] op='-->' nextPipe=(Id,"print")
+  55 | PipeDec inputs=[(Id,"k")] op='--<(' nextPipe=#56
+  56 | PipeDec inputs=[(Id,"a")] op='-->' nextPipe=(Id,"print")
+  57 | PipeDec inputs=[(Id,"l")] op='-->' nextPipe=(Id,"print")
+  58 | PipeDec inputs=[(Id,"m")] op='--<(' nextPipe=#59
+  59 | PipeDec inputs=[(Id,"a")] op='-->' nextPipe=(Id,"print")
+  60 | PipeDec inputs=[(Id,"a")] op='-(RAT)->' nextPipe=(Id,"print")`
 
 const expected1 = `   1 | Program imports=null definition=#2 pipeline=#22
    2 | Definitions block=#3
@@ -212,9 +212,9 @@ const expected1 = `   1 | Program imports=null definition=#2 pipeline=#22
   20 | ListDec prototype='||INT||' id=(Id,"result") assignment='<==' list=[(Id,"quarters"),(Id,"dimes"),(Id,"nickels"),(Id,"current_total")]
   21 | ReturnStatement expression=(Id,"result")
   22 | Pipelines pipes=[#23]
-  23 | Pipe inputs=[(Id,"INPUT")] op='-1->' nextPipe=#24
-  24 | Pipe inputs=[(Id,"a")] op='-(INT)->' nextPipe=#25
-  25 | Pipe inputs=[(Id,"denominate")] op='-->' nextPipe=(Id,"print")`
+  23 | PipeDec inputs=[(Id,"INPUT")] op='-1->' nextPipe=#24
+  24 | PipeDec inputs=[(Id,"a")] op='-(INT)->' nextPipe=#25
+  25 | PipeDec inputs=[(Id,"denominate")] op='-->' nextPipe=(Id,"print")`
 
 const expected2 = `   1 | Program imports=null definition=#2 pipeline=null
    2 | Definitions block=#3

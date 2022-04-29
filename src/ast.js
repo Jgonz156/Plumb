@@ -254,32 +254,32 @@ const astBuilder = plumbGrammar.createSemantics().addOperation("ast", {
             pipes.ast()
         )
     },
-    Pipe_Newlines(_nl0, pipe, _nl1){
+    PipeDec_Newlines(_nl0, pipe, _nl1){
         return pipe.ast()
     },
-    Pipe_Injection(args, op, end){
-        return new core.Pipe(
+    PipeDec_Injection(args, op, end){
+        return new core.PipeDec(
             args.asIteration().ast(),
             op.sourceString,
             end.ast()
         )
     },
-    Pipe_Drain(args, op, end){
-        return new core.Pipe(
+    PipeDec_Drain(args, op, end){
+        return new core.PipeDec(
             args.asIteration().ast(),
             op.sourceString,
             end.ast()
         )
     },
-    Pipe_Caster(args, op, end){
-        return new core.Pipe(
+    PipeDec_Caster(args, op, end){
+        return new core.PipeDec(
             args.asIteration().ast(),
             op.sourceString,
             end.ast()
         )
     },
-    Pipe_Factory(args, op, end){
-        return new core.Pipe(
+    PipeDec_Factory(args, op, end){
+        return new core.PipeDec(
             args.asIteration().ast(),
             op.sourceString,
             end.ast()

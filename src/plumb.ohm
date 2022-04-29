@@ -99,12 +99,12 @@ Plumb {
     rational = digit+ ("." digit+) (("E" | "e") ("+" | "-")? digit+)?
     integer = digit+ 
     space := ( " " | "\t" | "\r" ) | "::" (~"::" any)* "::" -- Comment
-    Pipelines = pipeline "{" Pipe* "}"
-    Pipe = ("\n")* Pipe ("\n")* -- Newlines
-    	 | NonemptyListOf<Exp8, ","> injection (Pipe | id) -- Injection
-    	 | NonemptyListOf<Exp8, ","> drain (Pipe | id) -- Drain
-         | NonemptyListOf<Exp8, ","> caster (Pipe | id) -- Caster
-         | NonemptyListOf<Exp8, ","> factory Pipe -- Factory
+    Pipelines = pipeline "{" PipeDec* "}"
+    PipeDec = ("\n")* PipeDec ("\n")* -- Newlines
+    	 | NonemptyListOf<Exp8, ","> injection (PipeDec | id) -- Injection
+    	 | NonemptyListOf<Exp8, ","> drain (PipeDec | id) -- Drain
+         | NonemptyListOf<Exp8, ","> caster (PipeDec | id) -- Caster
+         | NonemptyListOf<Exp8, ","> factory PipeDec -- Factory
     injection = "-->" 
     drain = "-" ( ( id | integer ) "-")+ ">"
     caster = "-(" (prototype | id) ")->"

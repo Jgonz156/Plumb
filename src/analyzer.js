@@ -6,6 +6,7 @@ import {
     TypeParameterPairObj,
     AttributeObj,
     MethodObj,
+    PipeObj,
     ListPrototypeObj,
     MapPrototypeObj,
     Token,
@@ -153,7 +154,7 @@ function checkIsIncrementStatement(s) {
 }
 
 class Context {
-    constructor({ parent = null, locals = new Map(), inLoop = false, function: f = null, prototype: p = null, hasConstructor: c = false, prevPipe: pp = null }) {
+    constructor({ parent = null, locals = new Map(), inLoop = false, function: f = null, prototype: p = null, hasConstructor: c = false, prevPipe: pp = null}) {
       Object.assign(this, { parent, locals, inLoop, function: f, prototype: p, hasConstructor: c, prevPipe: pp })
     }
     sees(name) {
@@ -426,16 +427,23 @@ class Context {
     }
     Pipelines(P) {
         let pipelineContext = this.newChildContext()
-        this.analyze(P.pipes)
+        pipelineContext.analyze(P.pipes)
     }
-    Pipe(P) {
+    PipeDec(P) {
+        if(this.prevPipe) P.inputs = this.prevPipe.pipe.outputs
         this.analyze(P.inputs)
         if(/^-->$/.test(P.op)){
-            P.outputs = P.inputs
+            P.value = new PipeObj(P.inputs, P.op, P.inputs, P.nextPipe, this.prevPipe)
         } else if(/^-((.)-)+>$/.test(P.op)){
             regResult = /^-((?:.-)+)>$/.exec(P.op)
-            P.attributesToDrain = regResult[1].substring(0, regResult[1].length-1).split("-").map(attribute => this.lookup(attribute))
+            attributesDrained = regResult[1].substring(0, regResult[1].length-1).split("-").map(attribute => this.lookup(attribute))
+            P.value = new PipeObj(P.inputs, P.op, attributesDrained, P.nextPipe, this.prevPipe)
+        } else if(P.op == "--<("){
+
+        } else if(/^-\(.+?\)->$/.test(P.op)){
+
         }
+        this.prevPipe = P
         this.analyze(P.nextPipe)
     }
     Token(T) {

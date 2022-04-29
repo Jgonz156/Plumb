@@ -234,9 +234,9 @@ export class BinaryExpression {
 }
 
 export class UnaryExpression {
-    constructor(op, operand){
+    constructor(op, right){
         this.op = op
-        this.right = operand
+        this.right = right
     }
 }
 
@@ -275,10 +275,20 @@ export class Pipelines {
     }
 }
 
-export class Pipe {
+export class PipeDec {
     constructor(inputs, op, nextPipe){
         this.inputs = inputs
         this.op = op
+        this.nextPipe = nextPipe
+    }
+}
+
+export class PipeObj {
+    constructor(inputs, op, outputs, nextPipe, prevPipe){
+        this.inputs = inputs
+        this.op = op
+        this.outputs = outputs
+        this.prevPipe = prevPipe
         this.nextPipe = nextPipe
     }
 }
