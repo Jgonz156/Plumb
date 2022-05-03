@@ -4,14 +4,14 @@ export default function generate(program) {
     const output = []
 
     const standardFunctions = new Map([
-        [stdlib.contents.print, x => `console.log(${x})`], //check later for garbage
+        [stdlib.contents.print, (x) => `console.log(${x})`], //check later for garbage
         //[stdlib.contents.print, x => `console.log(${x})`],
     ])
 
-    const targetName = (mapping => {
-        return entity => {
+    const targetName = ((mapping) => {
+        return (entity) => {
             if (!mapping.has(entity)) {
-                mapping.set(entity, mapping.size +1)
+                mapping.set(entity, mapping.size + 1)
             }
             return `${entity.name ?? entity.description}_${mapping.get(entity)}`
         }
@@ -33,13 +33,13 @@ export default function generate(program) {
         ["^", "**"],
     ])
 
-    const PtoJSOperators = plumbOp => opMap?.get(plumbOp) ?? plumbOp
+    const PtoJSOperators = (plumbOp) => opMap?.get(plumbOp) ?? plumbOp
 
     const generators = {
         Program(p) {
-            if(p.imports) gen(p.imports)
-            if(p.definition) gen(p.definition)
-            if(p.pipeline) gen(p.pipeline)
+            if (p.imports) gen(p.imports)
+            if (p.definition) gen(p.definition)
+            if (p.pipeline) gen(p.pipeline)
         },
         ImportDec(i) {
             output.push(`import * from ${i.stringPath}`)
@@ -54,11 +54,23 @@ export default function generate(program) {
             return targetName(v)
         },
         Assignment(a) {
-            if(a.self) output.push(`this.${gen(a.id.value)} ${PtoJSOperators(a.assignment)} ${a.expression.value}`)
-            else output.push(`${gen(a.id.value)} ${PtoJSOperators(a.assignment)} ${gen(a.expression.value)}`)
+            if (a.self)
+                output.push(
+                    `this.${gen(a.id.value)} ${PtoJSOperators(a.assignment)} ${
+                        a.expression.value
+                    }`
+                )
+            else
+                output.push(
+                    `${gen(a.id.value)} ${PtoJSOperators(a.assignment)} ${gen(
+                        a.expression.value
+                    )}`
+                )
         },
         FunctionDec(f) {
-            output.push(`function ${gen(f.id.value)}(${gen(f.parameters).join(", ")}) {`)
+            output.push(
+                `function ${gen(f.id.value)}(${gen(f.parameters).join(", ")}) {`
+            )
             gen(f.block)
             output.push(`}`)
         },
@@ -81,7 +93,11 @@ export default function generate(program) {
             return targetName(p)
         },
         AttributeDec(a) {
-            output.push(`#${gen(a.id.value)} ${PtoJSOperators(a.assignment)} ${gen(a.expression.value)}`)
+            output.push(
+                `#${gen(a.id.value)} ${PtoJSOperators(a.assignment)} ${gen(
+                    a.expression.value
+                )}`
+            )
         },
         AttributeObj(a) {
             return targetName(a)
@@ -105,7 +121,11 @@ export default function generate(program) {
             output.push(`}`)
         },
         ForStatement(f) {
-            output.push(`for( ${gen(f.assignment.value)}; ${gen(f.condition.value)}; ${gen(f.iteration.value)}){`)
+            output.push(
+                `for( ${gen(f.assignment.value)}; ${gen(
+                    f.condition.value
+                )}; ${gen(f.iteration.value)}){`
+            )
             gen(f.block)
             output.push(`}`)
         },
@@ -113,13 +133,21 @@ export default function generate(program) {
             output.push(`return ${r.expression.value}`)
         },
         ListDec(l) {
-            output.push(`let ${gen(l.id.value)} ${PtoJSOperators(l.assignment)} [${gen(l.list).join(", ")}]`)
+            output.push(
+                `let ${gen(l.id.value)} ${PtoJSOperators(l.assignment)} [${gen(
+                    l.list
+                ).join(", ")}]`
+            )
         },
         ListExp(l) {
             return `[${gen(l.list).join(", ")}]`
         },
         MapDec(m) {
-            output.push(`let ${gen(m.id.value)} ${PtoJSOperators(m.assignment)} new Map([${gen(m.map).join(", ")}])`)
+            output.push(
+                `let ${gen(m.id.value)} ${PtoJSOperators(
+                    m.assignment
+                )} new Map([${gen(m.map).join(", ")}])`
+            )
         },
         MapExp(m) {
             return `new Map([${gen(m.map).join(", ")}])`
@@ -131,7 +159,9 @@ export default function generate(program) {
             gen(b.statements)
         },
         BinaryExpression(b) {
-            return `${gen(b.left.value)} ${PtoJSOperators(b.op)} ${gen(b.right.value)}`
+            return `${gen(b.left.value)} ${PtoJSOperators(b.op)} ${gen(
+                b.right.value
+            )}`
         },
         UnaryExpression(u) {
             return `${PtoJSOperators(u.op)} ${gen(u.right.value)}`
@@ -146,7 +176,9 @@ export default function generate(program) {
             return `${gen(a.object.value)}.${gen(a.attribute.value)}`
         },
         MethodExpression(m) {
-            return `${gen(m.object.value)}.${gen(m.method.value)}(${gen(m.args).join(", ")})`
+            return `${gen(m.object.value)}.${gen(m.method.value)}(${gen(
+                m.args
+            ).join(", ")})`
         },
         Pipeline(p) {
             gen(p.pipes)
@@ -169,7 +201,6 @@ export default function generate(program) {
         Array(a) {
             return a.map(gen)
         },
-
     }
 
     gen(program)

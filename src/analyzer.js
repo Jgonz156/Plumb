@@ -11,7 +11,7 @@ import {
     ListPrototypeObj,
     MapPrototypeObj,
     Token,
-    error
+    error,
 } from "./core.js"
 import * as stdlib from "./stdlib.js"
 
@@ -28,7 +28,11 @@ function checkIsNumber(e) {
 }
 
 function checkIsNumberOrString(e) {
-    checkType(e, [PrototypeObj.integer, PrototypeObj.rational, PrototypeObj.string], "a number or a string")
+    checkType(
+        e,
+        [PrototypeObj.integer, PrototypeObj.rational, PrototypeObj.string],
+        "a number or a string"
+    )
 }
 
 function checkIsBool(e) {
@@ -40,35 +44,38 @@ function checkIsInt(e) {
 }
 
 function checkIsAType(e) {
-    check((e instanceof PrototypeObj), "Type expected")
+    check(e instanceof PrototypeObj, "Type expected")
 }
 
 function checkIsSameType(t1, t2) {
-    check(t1.prototype == t2.prototype || t1.prototype == PrototypeObj.doesNotExist || t2.prototype == PrototypeObj.doesNotExist, "Operands not of equivalent type")
+    check(
+        t1.prototype == t2.prototype ||
+            t1.prototype == PrototypeObj.doesNotExist ||
+            t2.prototype == PrototypeObj.doesNotExist,
+        "Operands not of equivalent type"
+    )
 }
 
 function checkIsAssignable(eType, cType) {
     check(
-        eType === "DNE" || eType==cType,
+        eType === "DNE" || eType == cType,
         `Cannot assign a ${eType} to a ${cType}`
     )
 }
 
 function checkIsCallable(e) {
     check(
-        (e instanceof PrototypeObj || e instanceof FunctionObj),
+        e instanceof PrototypeObj || e instanceof FunctionObj,
         "Call of a non-function or non-constructor",
         e
     )
 }
 
-function checkDeclaration(item, context){
+function checkDeclaration(item, context) {
     let exists = false
-    try{
+    try {
         exists = context.lookup(item) === item
-    } catch(e){
-
-    }
+    } catch (e) {}
     check(!exists, `${item} already declared in given context`, item)
 }
 
@@ -98,15 +105,15 @@ function checkInFunction(context) {
 
 function checkElementsAllOfSameType(list) {
     check(
-        list.slice(1).every(e => e.prototype == list[0].prototype),
-        "Elements in list not all of same type", 
+        list.slice(1).every((e) => e.prototype == list[0].prototype),
+        "Elements in list not all of same type",
         list
     )
 }
 
 function checkKeyValuesAllOfSameType(map) {
     check(
-        map.slice(1).every(e => e.value.prototype == map[0].value.prototype),
+        map.slice(1).every((e) => e.value.prototype == map[0].value.prototype),
         "Values in map not all of same type",
         map
     )
@@ -136,17 +143,11 @@ function checkSomethingToReturn(f) {
 
 }
 */
-function checkFunctionArguments(args, calleeType) {
+function checkFunctionArguments(args, calleeType) {}
 
-}
+function checkMethodArguments(args, calleeType) {}
 
-function checkMethodArguments(args, calleeType) {
-
-}
-
-function checkConstructorArguments(args, objectType) {
-
-}
+function checkConstructorArguments(args, objectType) {}
 
 function checkIsIncrementStatement(s) {
     let increments = false
@@ -155,14 +156,30 @@ function checkIsIncrementStatement(s) {
 }
 
 class Context {
-    constructor({ parent = null, locals = new Map(), inLoop = false, function: f = null, prototype: p = null, hasConstructor: c = false, prevPipe: pp = null}) {
-      Object.assign(this, { parent, locals, inLoop, function: f, prototype: p, hasConstructor: c, prevPipe: pp })
+    constructor({
+        parent = null,
+        locals = new Map(),
+        inLoop = false,
+        function: f = null,
+        prototype: p = null,
+        hasConstructor: c = false,
+        prevPipe: pp = null,
+    }) {
+        Object.assign(this, {
+            parent,
+            locals,
+            inLoop,
+            function: f,
+            prototype: p,
+            hasConstructor: c,
+            prevPipe: pp,
+        })
     }
     sees(name) {
         // Search "outward" through enclosing scopes
         return this.locals.has(name) || this.parent?.sees(name)
     }
-    add(name, entity){
+    add(name, entity) {
         this.locals.set(name, entity)
     }
     lookup(name) {
@@ -175,15 +192,20 @@ class Context {
         error(`Identifier ${name} not declared`)
     }
     newChildContext(props) {
-        return new Context({ ...this, ...props, parent: this, locals: new Map() })
+        return new Context({
+            ...this,
+            ...props,
+            parent: this,
+            locals: new Map(),
+        })
     }
     analyze(node) {
         return this[node.constructor.name](node)
     }
     Program(P) {
-        if(P.imports) this.analyze(P.imports)
-        if(P.definition) this.analyze(P.definition)
-        if(P.pipeline) this.analyze(P.pipeline)
+        if (P.imports) this.analyze(P.imports)
+        if (P.definition) this.analyze(P.definition)
+        if (P.pipeline) this.analyze(P.pipeline)
     }
     ImportDec(I) {
         this.add("Import Definition", I.path)
@@ -205,7 +227,7 @@ class Context {
         checkIsAssignable()
     }
     FunctionDec(F) {
-        if(!this.hasConstructor && this.prototype){
+        if (!this.hasConstructor && this.prototype) {
             this.hasConstructor = true
             //console.log(this)
             F.prototype = this.prototype
@@ -218,13 +240,22 @@ class Context {
             F.id.value = constructorFunction
             //console.log(F)
             checkIsAType(F.prototype)
-            const childContext = this.newChildContext({ inLoop: false, function: F.id.value })
+            const childContext = this.newChildContext({
+                inLoop: false,
+                function: F.id.value,
+            })
             childContext.analyze(F.parameters)
             this.add(F.id.lexeme, F.id.value)
             childContext.analyze(F.block)
         } else {
             //console.log(F)
-            F.prototype = [PrototypeObj.integer, PrototypeObj.string, PrototypeObj.boolean, PrototypeObj.doesNotExist, PrototypeObj.rational].filter( type => type.id == F.prototype )[0]
+            F.prototype = [
+                PrototypeObj.integer,
+                PrototypeObj.string,
+                PrototypeObj.boolean,
+                PrototypeObj.doesNotExist,
+                PrototypeObj.rational,
+            ].filter((type) => type.id == F.prototype)[0]
             //console.log(F)
             F.id.value = new FunctionObj(
                 F.prototype, //check later for source of odd prototypes
@@ -233,7 +264,10 @@ class Context {
             )
             checkFunctionDeclaration(F.id.lexeme, this)
             checkIsAType(F.prototype)
-            const childContext = this.newChildContext({ inLoop: false, function: F.id.value })
+            const childContext = this.newChildContext({
+                inLoop: false,
+                function: F.id.value,
+            })
             childContext.analyze(F.parameters)
             this.add(F.id.lexeme, F.id.value)
             childContext.analyze(F.block)
@@ -241,7 +275,13 @@ class Context {
     }
     TypeParameterPairDec(P) {
         //console.log(P)
-        P.prototype = [PrototypeObj.integer, PrototypeObj.string, PrototypeObj.boolean, PrototypeObj.doesNotExist, PrototypeObj.rational].filter( type => type.id == P.prototype )[0]
+        P.prototype = [
+            PrototypeObj.integer,
+            PrototypeObj.string,
+            PrototypeObj.boolean,
+            PrototypeObj.doesNotExist,
+            PrototypeObj.rational,
+        ].filter((type) => type.id == P.prototype)[0]
         //P.id = new VariableObj(P.prototype, P.id)
         P.id.value = new TypeParameterPairObj(P.prototype, P.id)
         //console.log(P)
@@ -250,7 +290,11 @@ class Context {
     PrototypeDec(P) {
         checkPrototypeDeclaration(P.id.lexeme, this)
         P.id.value = new PrototypeObj(P.id.lexeme)
-        let childContext = this.newChildContext({ inLoop: false, prototype: P.id.value, hasConstructor: false })
+        let childContext = this.newChildContext({
+            inLoop: false,
+            prototype: P.id.value,
+            hasConstructor: false,
+        })
         this.add(P.id.lexeme, P.id.value)
         //console.log("After adding the new prototype",this)
         childContext.analyze(P.block)
@@ -264,14 +308,13 @@ class Context {
     }
     MethodDec(M) {
         if (M.prototype) this.analyze(M.prototype)
-        M.id.value = new MethodObj(
-            M.prototype, 
-            M.id, 
-            M.parameters
-        )
+        M.id.value = new MethodObj(M.prototype, M.id, M.parameters)
         checkMethodDeclaration(M.id.lexeme, this)
         checkIsAType(M.prototype)
-        const childContext = this.newChildContext({ inLoop: false, function: M.id.value })
+        const childContext = this.newChildContext({
+            inLoop: false,
+            function: M.id.value,
+        })
         childContext.analyze(M.id.value.parameters)
         this.add(M.id.lexeme, M.id.value)
         childContext.analyze(M.block)
@@ -316,7 +359,10 @@ class Context {
         //console.log("After: ", L.list)
         checkElementsAllOfSameType(L.list)
         L.prototype = new ListPrototypeObj(L.prototype)
-        checkIsSameType(L.prototype.basePrototype, L.list[0]?.prototype.id ?? PrototypeObj.doesNotExist.id)
+        checkIsSameType(
+            L.prototype.basePrototype,
+            L.list[0]?.prototype.id ?? PrototypeObj.doesNotExist.id
+        )
     }
     ListExp(L) {
         this.analyze(L.list)
@@ -347,26 +393,26 @@ class Context {
     BinaryExpression(B) {
         this.analyze(B.left)
         this.analyze(B.right)
-        if(["or", "and"].includes(B.op)){
+        if (["or", "and"].includes(B.op)) {
             checkIsBool(B.left)
             checkIsBool(B.right)
             B.prototype = PrototypeObj.boolean
-        } else if(["==", "!="].includes(B.op)){
+        } else if (["==", "!="].includes(B.op)) {
             checkIsSameType(B.left, B.right)
             B.prototype = PrototypeObj.boolean
-        } else if(["<=", ">=", "<", ">"].includes(B.op)){
+        } else if (["<=", ">=", "<", ">"].includes(B.op)) {
             //console.log(B)
             checkIsNumber(B.left)
             checkIsSameType(B.left, B.right)
             //checknumberorstring
             B.prototype = PrototypeObj.boolean
-        } else if(["+"].includes(B.op)){
+        } else if (["+"].includes(B.op)) {
             //console.log(B)
             checkIsNumber(B.left)
             checkIsSameType(B.left, B.right)
             //checknumberorstring
             B.prototype = B.left.prototype
-        } else if(["-", "*", "/", "%", "^"].includes(B.op)){
+        } else if (["-", "*", "/", "%", "^"].includes(B.op)) {
             checkIsNumber(B.left)
             checkIsSameType(B.left, B.right)
             B.prototype = B.left.prototype
@@ -374,10 +420,10 @@ class Context {
     }
     UnaryExpression(U) {
         this.analyze(U.operand)
-        if("!" === U.op.lexeme){
+        if ("!" === U.op.lexeme) {
             checkIsBool(U.operand)
             U.prototype = PrototypeObj.boolean
-        } else if ("-" === U.op.lexeme){
+        } else if ("-" === U.op.lexeme) {
             checkIsNumber(U.operand)
             U.prototype = U.operand.prototype
         }
@@ -386,7 +432,8 @@ class Context {
         this.analyze(I.object)
         this.analyze(I.index)
         I.prototype = I.object.prototype
-        if(I.object.constructor === MapPrototypeObj) { // CHECK LATER MIGHT CAUSE PROBS
+        if (I.object.constructor === MapPrototypeObj) {
+            // CHECK LATER MIGHT CAUSE PROBS
             checkIsString(I.index)
         } else if (I.object.constructor === ListPrototypeObj) {
             checkIsInt(I.index)
@@ -400,11 +447,11 @@ class Context {
         //console.log("callee", callee)
         checkIsCallable(callee)
         this.analyze(C.args)
-        if(callee.constructor === PrototypeObj){
-            checkConstructorArguments(C.args, this.lookup(C.id.lexeme))//sacoajvioac
+        if (callee.constructor === PrototypeObj) {
+            checkConstructorArguments(C.args, this.lookup(C.id.lexeme)) //sacoajvioac
             C.prototype = callee.prototype
         } else {
-            checkFunctionArguments(C.args, this.lookup(C.id.lexeme))//coajicofacda
+            checkFunctionArguments(C.args, this.lookup(C.id.lexeme)) //coajicofacda
             C.prototype = callee.prototype
         }
     }
@@ -414,7 +461,9 @@ class Context {
         if (!(A.object.prototype instanceof PrototypeObj)) {
             A.object.prototype = this.lookup(A.object.prototype)
         }
-        A.attribute = A.object.prototype.attributes.find(a => a.id.lexeme === A.attribute.lexeme)
+        A.attribute = A.object.prototype.attributes.find(
+            (a) => a.id.lexeme === A.attribute.lexeme
+        )
         A.prototype = A.attribute.prototype
     }
     MethodExpression(M) {
@@ -433,61 +482,99 @@ class Context {
     PipeDec(P) {
         let toApply = null
         let toApplyString = ""
-        if(this.prevPipe && this.prevPipe.nextPipe.constructor == PipeDec) {
+        if (this.prevPipe && this.prevPipe.nextPipe.constructor == PipeDec) {
             toApplyString = P.inputs
             toApply = P.inputs
             P.inputs = this.prevPipe.value.outputs
         }
-        if(toApply) this.analyze(toApply)
+        if (toApply) this.analyze(toApply)
         this.analyze(P.inputs)
-        if(/^-->$/.test(P.op)){
-            if (toApply) P.value = new PipeObj(P.inputs, P.op, new Call(toApply, P.inputs), P.nextPipe, this.prevPipe)
-            else P.value = new PipeObj(P.inputs, P.op, P.inputs, P.nextPipe, this.prevPipe)
+        if (/^-->$/.test(P.op)) {
+            if (toApply)
+                P.value = new PipeObj(
+                    P.inputs,
+                    P.op,
+                    new Call(toApply, P.inputs),
+                    P.nextPipe,
+                    this.prevPipe
+                )
+            else
+                P.value = new PipeObj(
+                    P.inputs,
+                    P.op,
+                    P.inputs,
+                    P.nextPipe,
+                    this.prevPipe
+                )
             //leave late for ast
-            if (toApplyString != "")P.inputs = toApplyString
-        } else if(/^-((.)-)+>$/.test(P.op)){
+            if (toApplyString != "") P.inputs = toApplyString
+        } else if (/^-((.)-)+>$/.test(P.op)) {
             regResult = /^-((?:.-)+)>$/.exec(P.op)
-            let attributesDrained = regResult[1].substring(0, regResult[1].length-1).split("-").map(attribute => this.lookup(attribute))
-            P.value = new PipeObj(P.inputs, P.op, attributesDrained, P.nextPipe, this.prevPipe)
-        } else if(P.op == "--<("){
+            let attributesDrained = regResult[1]
+                .substring(0, regResult[1].length - 1)
+                .split("-")
+                .map((attribute) => this.lookup(attribute))
+            P.value = new PipeObj(
+                P.inputs,
+                P.op,
+                attributesDrained,
+                P.nextPipe,
+                this.prevPipe
+            )
+        } else if (P.op == "--<(") {
             let toBePiped = P.inputs?.list ?? P.inputs
-            P.value = toBePiped.map((item) => new PipeObj(item, "-->", item, P.nextPipe, this.prevPipe))
-        } else if(/^-\(.+?\)->$/.test(P.op)){
+            P.value = toBePiped.map(
+                (item) =>
+                    new PipeObj(item, "-->", item, P.nextPipe, this.prevPipe)
+            )
+        } else if (/^-\(.+?\)->$/.test(P.op)) {
             regResult = /^-\((.+?)\)->$/.exec(P.op)[1]
             let prototypeToCast = this.lookup(regResult)
-            console.log(prototypeToCast)
+            // console.log(prototypeToCast)
             P.value = new PipeObj()
         }
         this.prevPipe = P
         this.analyze(P.nextPipe)
     }
     Token(T) {
-        if(T.category === "Id") {
+        if (T.category === "Id") {
             T.value = this.lookup(T.lexeme)
-            if(["INT", "RAT", "STR", "DNE", "BOOL"].includes(T.value.prototype)){
+            if (
+                ["INT", "RAT", "STR", "DNE", "BOOL"].includes(T.value.prototype)
+            ) {
                 //console.log("TokenContextWhenAssigningPrototype",this)
-                T.prototype = [PrototypeObj.integer, PrototypeObj.string, PrototypeObj.boolean, PrototypeObj.doesNotExist, PrototypeObj.rational].filter( type => type.id == T.value.prototype )[0]
+                T.prototype = [
+                    PrototypeObj.integer,
+                    PrototypeObj.string,
+                    PrototypeObj.boolean,
+                    PrototypeObj.doesNotExist,
+                    PrototypeObj.rational,
+                ].filter((type) => type.id == T.value.prototype)[0]
             } else {
                 T.prototype = T.value.prototype
             }
         }
-        if(T.category === "INT") [T.value, T.prototype] = [BigInt(T.lexeme), PrototypeObj.integer]
-        if(T.category === "RAT") [T.value, T.prototype] = [Number(T.lexeme), PrototypeObj.rational]
-        if(T.category === "STR") [T.value, T.prototype] = [T.lexeme, PrototypeObj.string]
-        if(T.category === "DNE") [T.value, T.prototype] = [T.lexeme, PrototypeObj.doesNotExist]
-        if(T.category === "BOOL") [T.value, T.prototype] = [T.lexeme === "true", PrototypeObj.boolean]
+        if (T.category === "INT")
+            [T.value, T.prototype] = [BigInt(T.lexeme), PrototypeObj.integer]
+        if (T.category === "RAT")
+            [T.value, T.prototype] = [Number(T.lexeme), PrototypeObj.rational]
+        if (T.category === "STR")
+            [T.value, T.prototype] = [T.lexeme, PrototypeObj.string]
+        if (T.category === "DNE")
+            [T.value, T.prototype] = [T.lexeme, PrototypeObj.doesNotExist]
+        if (T.category === "BOOL")
+            [T.value, T.prototype] = [T.lexeme === "true", PrototypeObj.boolean]
     }
     Array(a) {
-        a.forEach(item => this.analyze(item))
+        a.forEach((item) => this.analyze(item))
     }
 }
-
 
 export default function analyze(node) {
     const initialContext = new Context({})
     for (const [name, type] of Object.entries(stdlib.contents)) {
-      initialContext.add(name, type)
+        initialContext.add(name, type)
     }
     initialContext.analyze(node)
     return node
-  }
+}

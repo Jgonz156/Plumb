@@ -2,7 +2,7 @@ import util from "util"
 
 export class Program {
     //Example: Definitions {\n INT x <== 1 \n} Pipelines {\n x --> print \n}
-    constructor(imports, definition, pipeline){
+    constructor(imports, definition, pipeline) {
         this.imports = imports
         this.definition = definition
         this.pipeline = pipeline
@@ -10,19 +10,19 @@ export class Program {
 }
 
 export class ImportDec {
-    constructor(stringPath){
+    constructor(stringPath) {
         this.path = stringPath
     }
 }
 
 export class Definitions {
-    constructor(block){
+    constructor(block) {
         this.block = block
     }
 }
 
 export class VariableDec {
-    constructor(prototype, id, assignment, expression){
+    constructor(prototype, id, assignment, expression) {
         this.prototype = prototype
         this.id = id
         this.assignment = assignment
@@ -31,14 +31,14 @@ export class VariableDec {
 }
 
 export class VariableObj {
-    constructor(prototype, id){
+    constructor(prototype, id) {
         this.prototype = prototype
         this.id = id
     }
 }
 
 export class Assignment {
-    constructor(self, id, assignment, expression){
+    constructor(self, id, assignment, expression) {
         this.self = self
         this.id = id
         this.assignment = assignment
@@ -47,7 +47,7 @@ export class Assignment {
 }
 
 export class FunctionDec {
-    constructor(prototype, id, parameters, block){
+    constructor(prototype, id, parameters, block) {
         this.prototype = prototype
         this.id = id
         this.parameters = parameters
@@ -56,7 +56,7 @@ export class FunctionDec {
 }
 
 export class FunctionObj {
-    constructor(prototype, id, parameters){
+    constructor(prototype, id, parameters) {
         this.prototype = prototype
         this.id = id
         this.parameters = parameters
@@ -64,21 +64,21 @@ export class FunctionObj {
 }
 
 export class TypeParameterPairDec {
-    constructor(prototype, id){
+    constructor(prototype, id) {
         this.prototype = prototype
         this.id = id
     }
 }
 
 export class TypeParameterPairObj {
-    constructor(prototype, id){
+    constructor(prototype, id) {
         this.prototype = prototype
         this.id = id
     }
 }
 
 export class PrototypeDec {
-    constructor(id, block){
+    constructor(id, block) {
         this.id = id
         this.block = block
     }
@@ -90,7 +90,7 @@ export class PrototypeObj {
     static integer = new PrototypeObj("INT")
     static string = new PrototypeObj("STR")
     static doesNotExist = new PrototypeObj("DNE")
-    constructor(id, attributes = [], methods = []){
+    constructor(id, attributes = [], methods = []) {
         this.id = id
         this.attributes = attributes
         this.methods = methods
@@ -98,7 +98,7 @@ export class PrototypeObj {
 }
 
 export class AttributeDec {
-    constructor(prototype, id, assignment, expression){
+    constructor(prototype, id, assignment, expression) {
         this.prototype = prototype
         this.id = id
         this.assignment = assignment
@@ -107,15 +107,14 @@ export class AttributeDec {
 }
 
 export class AttributeObj {
-    constructor(prototype, id){
+    constructor(prototype, id) {
         this.prototype = prototype
         this.id = id
     }
 }
 
-
 export class MethodDec {
-    constructor(prototype, id, parameters, block){
+    constructor(prototype, id, parameters, block) {
         this.prototype = prototype
         this.id = id
         this.parameters = parameters
@@ -132,21 +131,21 @@ export class MethodObj {
 }
 
 export class IfStatement {
-    constructor(condition, block){
+    constructor(condition, block) {
         this.condition = condition
         this.block = block
     }
 }
 
 export class WhileStatement {
-    constructor(condition, block){
+    constructor(condition, block) {
         this.condition = condition
         this.block = block
     }
 }
 
 export class ForStatement {
-    constructor(assignment, condition, iteration, block){
+    constructor(assignment, condition, iteration, block) {
         this.assignment = assignment
         this.condition = condition
         this.iteration = iteration
@@ -155,13 +154,13 @@ export class ForStatement {
 }
 
 export class ReturnStatement {
-    constructor(expression){
+    constructor(expression) {
         this.expression = expression
     }
 }
 
 export class ListDec {
-    constructor(prototype, id, assignment, list){
+    constructor(prototype, id, assignment, list) {
         this.prototype = prototype
         this.id = id
         this.assignment = assignment
@@ -170,21 +169,21 @@ export class ListDec {
 }
 
 export class ListExp {
-    constructor(prototype, list){
+    constructor(prototype, list) {
         this.prototype = prototype
         this.list = list
     }
 }
 
 export class ListPrototypeObj extends PrototypeObj {
-    constructor(prototype){
+    constructor(prototype) {
         super(prototype)
-        this.basePrototype = prototype.slice(2, prototype.length-2)
+        this.basePrototype = prototype.slice(2, prototype.length - 2)
     }
 }
 
 export class MapDec {
-    constructor(prototype, id, assignment, map){
+    constructor(prototype, id, assignment, map) {
         this.prototype = prototype
         this.id = id
         this.assignment = assignment
@@ -193,21 +192,21 @@ export class MapDec {
 }
 
 export class MapExp {
-    constructor(prototype, map){
+    constructor(prototype, map) {
         this.prototype = prototype
         this.map = map
     }
 }
 
 export class MapPrototypeObj extends PrototypeObj {
-    constructor(prototype){
+    constructor(prototype) {
         super(prototype)
-        this.basePrototype = prototype.slice(2, prototype.length-2)
+        this.basePrototype = prototype.slice(2, prototype.length - 2)
     }
 }
 
 export class KeyValuePair {
-    constructor(key, value){
+    constructor(key, value) {
         this.key = key
         this.value = value
     }
@@ -220,13 +219,13 @@ export class Pair {
 }
 */
 export class Block {
-    constructor(statements){
+    constructor(statements) {
         this.statements = statements
     }
 }
 
 export class BinaryExpression {
-    constructor(left, op, right){
+    constructor(left, op, right) {
         this.left = left
         this.op = op
         this.right = right
@@ -234,35 +233,35 @@ export class BinaryExpression {
 }
 
 export class UnaryExpression {
-    constructor(op, right){
+    constructor(op, right) {
         this.op = op
         this.right = right
     }
 }
 
 export class IndexExpression {
-    constructor(object, index){
+    constructor(object, index) {
         this.object = object
         this.index = index
     }
 }
 
 export class Call {
-    constructor(id, args){
+    constructor(id, args) {
         this.id = id
         this.args = args
     }
 }
 
 export class AccessExpression {
-    constructor(object, attribute){
+    constructor(object, attribute) {
         this.object = object
         this.attribute = attribute
     }
 }
 
 export class MethodExpression {
-    constructor(object, method, args){
+    constructor(object, method, args) {
         this.object = object
         this.method = method
         this.args = args
@@ -270,13 +269,13 @@ export class MethodExpression {
 }
 
 export class Pipelines {
-    constructor(pipes){
+    constructor(pipes) {
         this.pipes = pipes
     }
 }
 
 export class PipeDec {
-    constructor(inputs, op, nextPipe){
+    constructor(inputs, op, nextPipe) {
         this.inputs = inputs
         this.op = op
         this.nextPipe = nextPipe
@@ -284,7 +283,7 @@ export class PipeDec {
 }
 
 export class PipeObj {
-    constructor(inputs, op, outputs, nextPipe, prevPipe){
+    constructor(inputs, op, outputs, nextPipe, prevPipe) {
         this.inputs = inputs
         this.op = op
         this.outputs = outputs
@@ -294,7 +293,7 @@ export class PipeObj {
 }
 
 export class Token {
-    constructor(category, source){
+    constructor(category, source) {
         this.category = category
         this.source = source
     }
@@ -312,18 +311,18 @@ export function error(message, token) {
 }
 
 Program.prototype[util.inspect.custom] = function () {
-const tags = new Map()
+    const tags = new Map()
 
-// Attach a unique integer tag to every node
-function tag(node) {
-    if (tags.has(node) || typeof node !== "object" || node === null) return
-    if (node.constructor === Token) {
-        // Tokens are not tagged themselves, but their values might be
-    tag(node?.value)
-    } else {
+    // Attach a unique integer tag to every node
+    function tag(node) {
+        if (tags.has(node) || typeof node !== "object" || node === null) return
+        if (node.constructor === Token) {
+            // Tokens are not tagged themselves, but their values might be
+            tag(node?.value)
+        } else {
             // Non-tokens are tagged
-        tags.set(node, tags.size + 1)
-        for (const child of Object.values(node)) {
+            tags.set(node, tags.size + 1)
+            for (const child of Object.values(node)) {
                 Array.isArray(child) ? child.forEach(tag) : tag(child)
             }
         }
@@ -333,12 +332,16 @@ function tag(node) {
         function view(e) {
             if (tags.has(e)) return `#${tags.get(e)}`
             if (e?.constructor === Token) {
-                return `(${e.category},"${e.lexeme}"${e.value ? "," + view(e.value) : ""})`
+                return `(${e.category},"${e.lexeme}"${
+                    e.value ? "," + view(e.value) : ""
+                })`
             }
             if (Array.isArray(e)) return `[${e.map(view)}]`
             return util.inspect(e)
         }
-        for (let [node, id] of [...tags.entries()].sort((a, b) => a[1] - b[1])) {
+        for (let [node, id] of [...tags.entries()].sort(
+            (a, b) => a[1] - b[1]
+        )) {
             let type = node.constructor.name
             let props = Object.entries(node).map(([k, v]) => `${k}=${view(v)}`)
             yield `${String(id).padStart(4, " ")} | ${type} ${props.join(" ")}`

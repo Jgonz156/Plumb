@@ -6,9 +6,9 @@ export default function optimize(node) {
 
 const optimizers = {
     Program(P) {
-        if(P.imports) P.imports = optimize(P.imports)
-        if(P.definition) P.definition = optimize(P.definition)
-        if(P.pipeline) P.pipeline = optimize(P.pipeline)
+        if (P.imports) P.imports = optimize(P.imports)
+        if (P.definition) P.definition = optimize(P.definition)
+        if (P.pipeline) P.pipeline = optimize(P.pipeline)
         return P
     },
     ImportDec(I) {
@@ -29,7 +29,7 @@ const optimizers = {
     Assignment(A) {
         A.id = optimize(A.id)
         A.expression = optimize(A.expression)
-        if(A.id == A.expression){
+        if (A.id == A.expression) {
             return []
         }
         return A
@@ -87,7 +87,7 @@ const optimizers = {
     IfStatement(I) {
         I.condition = optimize(I.condition)
         I.block = optimize(I.block)
-        if(I.condition == false) {
+        if (I.condition == false) {
             return []
         } else if (I.condition == true) {
             return I.block
@@ -97,7 +97,7 @@ const optimizers = {
     WhileStatement(W) {
         W.condition = optimize(W.condition)
         W.block = optimize(W.block)
-        if(W.condition == false) {
+        if (W.condition == false) {
             return []
         }
         return W
@@ -107,7 +107,7 @@ const optimizers = {
         F.condition = optimize(F.condition)
         F.iteration = optimize(F.iteration)
         F.block = optimize(F.block)
-        if(F.condition == false){
+        if (F.condition == false) {
             return []
         }
         return F
@@ -168,7 +168,8 @@ const optimizers = {
                 else if (e.op === ">") return e.left > e.right
             } else if (e.left === 0 && e.op === "+") return e.right
             else if (e.left === 1 && e.op === "*") return e.right
-            else if (e.left === 0 && e.op === "-") return new core.UnaryExpression("-", e.right)
+            else if (e.left === 0 && e.op === "-")
+                return new core.UnaryExpression("-", e.right)
             else if (e.left === 1 && e.op === "^") return 1
             else if (e.left === 0 && ["*", "/"].includes(e.op)) return 0
         } else if (e.right.constructor === Number) {
@@ -223,5 +224,5 @@ const optimizers = {
     },
     Array(A) {
         return A.flatMap(optimize)
-    }
+    },
 }
