@@ -99,6 +99,9 @@ const semanticChecks = [
   //["built-in sin", "print(sin(π));"],
   //["built-in cos", "print(cos(93.999));"],
   //["built-in hypot", "print(hypot(-4.0, 3.00001));"],
+  ["basic injection pipe", "Definitions{INT x <== 683}Pipelines{x --> print}"],
+  ["multiple basic injection pipes", "Definitions{INT x <== 683\n BOOL y <== true}Pipelines{x --> print\n y --> print}"],
+  ["complicated injection pipe", "Definitions{INT x <== 683\n INT FUNC subtractOne(INT a){return a - 1}}Pipelines{x --> subtractOne --> print}"]
 ]
 
 // Programs that are syntactically correct but have semantic errors
@@ -202,10 +205,10 @@ const semanticErrors = [
 describe("The analyzer", () => {
   for (const [scenario, source] of semanticChecks) {
     it(`recognizes ${scenario}`, () => {
-      //console.log(ast(source))
+      console.log(ast(source))
       let analyzedAst = analyze(ast(source))
       assert.ok(analyzedAst)
-      //console.log(analyzedAst)
+      console.log(analyzedAst)
     })
   }
   for (const [scenario, source, errorMessagePattern] of semanticErrors) {

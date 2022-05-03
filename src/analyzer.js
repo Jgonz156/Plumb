@@ -1,5 +1,6 @@
-//import { prototype } from "mocha"
 import {
+    Call,
+    PipeDec,
     VariableObj,
     PrototypeObj,
     FunctionObj,
@@ -430,18 +431,32 @@ class Context {
         pipelineContext.analyze(P.pipes)
     }
     PipeDec(P) {
-        if(this.prevPipe) P.inputs = this.prevPipe.pipe.outputs
+        let toApply = null
+        let toApplyString = ""
+        if(this.prevPipe && this.prevPipe.nextPipe.constructor == PipeDec) {
+            toApplyString = P.inputs
+            toApply = P.inputs
+            P.inputs = this.prevPipe.value.outputs
+        }
+        if(toApply) this.analyze(toApply)
         this.analyze(P.inputs)
         if(/^-->$/.test(P.op)){
-            P.value = new PipeObj(P.inputs, P.op, P.inputs, P.nextPipe, this.prevPipe)
+            if (toApply) P.value = new PipeObj(P.inputs, P.op, new Call(toApply, P.inputs), P.nextPipe, this.prevPipe)
+            else P.value = new PipeObj(P.inputs, P.op, P.inputs, P.nextPipe, this.prevPipe)
+            //leave late for ast
+            if (toApplyString != "")P.inputs = toApplyString
         } else if(/^-((.)-)+>$/.test(P.op)){
             regResult = /^-((?:.-)+)>$/.exec(P.op)
-            attributesDrained = regResult[1].substring(0, regResult[1].length-1).split("-").map(attribute => this.lookup(attribute))
+            let attributesDrained = regResult[1].substring(0, regResult[1].length-1).split("-").map(attribute => this.lookup(attribute))
             P.value = new PipeObj(P.inputs, P.op, attributesDrained, P.nextPipe, this.prevPipe)
         } else if(P.op == "--<("){
-
+            let toBePiped = P.inputs?.list ?? P.inputs
+            P.value = toBePiped.map((item) => new PipeObj(item, "-->", item, P.nextPipe, this.prevPipe))
         } else if(/^-\(.+?\)->$/.test(P.op)){
-
+            regResult = /^-\((.+?)\)->$/.exec(P.op)[1]
+            let prototypeToCast = this.lookup(regResult)
+            console.log(prototypeToCast)
+            P.value = new PipeObj()
         }
         this.prevPipe = P
         this.analyze(P.nextPipe)
