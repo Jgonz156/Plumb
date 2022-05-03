@@ -180,7 +180,7 @@ export default function generate(program) {
                 m.args
             ).join(", ")})`
         },
-        Pipeline(p) {
+        Pipelines(p) {
             gen(p.pipes)
         },
         Pipe(p) {
