@@ -1,0 +1,7 @@
+Definitions{
+	||RAT|| y <== ||||
+    ||INT|| x <== ||1,2||
+    y <++  (INT) ||3, 4||
+    y <++  (INT) <<"bob":3, "job":4>>
+    print((INT) ||1,2,3,4||)
+}
