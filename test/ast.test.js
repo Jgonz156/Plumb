@@ -129,6 +129,12 @@ Definitions {
 }
 `
 
+const source8 = `
+Definitions{
+  DNE x <== none
+}
+`
+
 const expected = `   1 | Program imports=#2 definition=#3 pipeline=#49
    2 | ImportDec path='"./test_path"'
    3 | Definitions block=#4
@@ -280,7 +286,7 @@ const expected7 = `   1 | Program imports=null definition=#2 pipeline=null
   19 | Call id=(Id,"print") args=[(STR,""This will never print!"")]`
 
 describe("The AST generator", () => {
-  //console.log(ast(source7))
+  //console.log(ast(source8))
   it("produces a correct AST", () => {
     assert.deepStrictEqual(util.format(ast(source)), expected)
   })

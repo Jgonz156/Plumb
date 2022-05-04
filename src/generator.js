@@ -13,7 +13,7 @@ export default function generate(program) {
             if (!mapping.has(entity)) {
                 mapping.set(entity, mapping.size + 1)
             }
-            return `${entity.name ?? entity.description}_${mapping.get(entity)}`
+            return `${entity?.source?._contents ?? entity?.id ?? entity.name ?? entity.description}_${mapping.get(entity)}`
         }
     })(new Map())
 
@@ -48,28 +48,29 @@ export default function generate(program) {
             gen(d.block)
         },
         VariableDec(v) {
-            output.push(`let ${gen(v.id.value)} = ${v.expression.value}`)
+            output.push(`let ${gen(v.id)} = ${gen(v.expression)}`)
         },
         VariableObj(v) {
-            return targetName(v)
+            return targetName(v.id)
         },
         Assignment(a) {
-            if (a.self)
+            if (a.self){
                 output.push(
-                    `this.${gen(a.id.value)} ${PtoJSOperators(a.assignment)} ${
-                        a.expression.value
+                    `this.${gen(a.id)} ${PtoJSOperators(a.assignment)} ${
+                        a.expression
                     }`
                 )
-            else
+                }else{
                 output.push(
-                    `${gen(a.id.value)} ${PtoJSOperators(a.assignment)} ${gen(
-                        a.expression.value
+                    `${gen(a.id)} ${PtoJSOperators(a.assignment)} ${gen(
+                        a.expression
                     )}`
                 )
+                    }
         },
         FunctionDec(f) {
             output.push(
-                `function ${gen(f.id.value)}(${gen(f.parameters).join(", ")}) {`
+                `function ${gen(f.id)}(${gen(f.parameters).join(", ")}) {`
             )
             gen(f.block)
             output.push(`}`)
@@ -78,13 +79,13 @@ export default function generate(program) {
             return targetName(f)
         },
         TypeParameterPairDec(p) {
-            output.push(`${gen(p.id.value)}`)
+            output.push(`${gen(p.id)}`)
         },
         TypeParameterPairObj(p) {
             return targetName(p)
         },
         PrototypeDec(p) {
-            output.push(`class ${gen(p.id.value)} {`)
+            output.push(`class ${gen(p.id)} {`)
             gen(p.attributes)
             gen(p.methods)
             output.push(`}`)
@@ -94,8 +95,8 @@ export default function generate(program) {
         },
         AttributeDec(a) {
             output.push(
-                `#${gen(a.id.value)} ${PtoJSOperators(a.assignment)} ${gen(
-                    a.expression.value
+                `#${gen(a.id)} ${PtoJSOperators(a.assignment)} ${gen(
+                    a.expression
                 )}`
             )
         },
@@ -103,7 +104,7 @@ export default function generate(program) {
             return targetName(a)
         },
         MethodDec(m) {
-            output.push(`${gen(m.id.value)}(${gen(m.parameters).join(", ")}){`)
+            output.push(`${gen(m.id)}(${gen(m.parameters).join(", ")}){`)
             gen(m.block)
             output.push(`}`)
         },
@@ -111,30 +112,30 @@ export default function generate(program) {
             return targetName(m)
         },
         IfStatement(i) {
-            output.push(`if(${gen(i.condition.value)}){`)
+            output.push(`if(${gen(i.condition)}){`)
             gen(i.block)
             output.push(`}`)
         },
         WhileStatement(w) {
-            output.push(`while(${gen(w.condition.value)}){`)
+            output.push(`while(${gen(w.condition)}){`)
             gen(w.block)
             output.push(`}`)
         },
         ForStatement(f) {
             output.push(
-                `for( ${gen(f.assignment.value)}; ${gen(
+                `for( ${gen(f.assignment)}; ${gen(
                     f.condition.value
-                )}; ${gen(f.iteration.value)}){`
+                )}; ${gen(f.iteration)}){`
             )
             gen(f.block)
             output.push(`}`)
         },
         ReturnStatement(r) {
-            output.push(`return ${r.expression.value}`)
+            output.push(`return ${r.expression}`)
         },
         ListDec(l) {
             output.push(
-                `let ${gen(l.id.value)} ${PtoJSOperators(l.assignment)} [${gen(
+                `let ${gen(l.id)} ${PtoJSOperators(l.assignment)} [${gen(
                     l.list
                 ).join(", ")}]`
             )
@@ -144,7 +145,7 @@ export default function generate(program) {
         },
         MapDec(m) {
             output.push(
-                `let ${gen(m.id.value)} ${PtoJSOperators(
+                `let ${gen(m.id)} ${PtoJSOperators(
                     m.assignment
                 )} new Map([${gen(m.map).join(", ")}])`
             )
@@ -153,30 +154,30 @@ export default function generate(program) {
             return `new Map([${gen(m.map).join(", ")}])`
         },
         KeyValuePair(k) {
-            return `${gen(k.key.value)} : ${gen(k.value.value)}`
+            return `[${gen(k.key)}, ${gen(k.value)}]`
         },
         Block(b) {
             gen(b.statements)
         },
         BinaryExpression(b) {
-            return `${gen(b.left.value)} ${PtoJSOperators(b.op)} ${gen(
-                b.right.value
+            return `${gen(b.left)} ${PtoJSOperators(b.op)} ${gen(
+                b.right
             )}`
         },
         UnaryExpression(u) {
-            return `${PtoJSOperators(u.op)} ${gen(u.right.value)}`
+            return `${PtoJSOperators(u.op)} ${gen(u.right)}`
         },
         IndexExpression(i) {
-            return `${gen(i.object.value)}[${gen(i.index.value)}]`
+            return `${gen(i.object)}[${gen(i.index)}]`
         },
         Call(c) {
-            return `${gen(c.id.value)}(${gen(c.args).join(", ")})`
+            return `${gen(c.id)}(${gen(c.args).join(", ")})`
         },
         AccessExpression(a) {
-            return `${gen(a.object.value)}.${gen(a.attribute.value)}`
+            return `${gen(a.object)}.${gen(a.attribute)}`
         },
         MethodExpression(m) {
-            return `${gen(m.object.value)}.${gen(m.method.value)}(${gen(
+            return `${gen(m.object)}.${gen(m.method)}(${gen(
                 m.args
             ).join(", ")})`
         },
@@ -196,6 +197,8 @@ export default function generate(program) {
             return e
         },
         String(e) {
+            if (e.trim() == "none") return "null"
+            else if (e.trim() == "all") return "undefined"
             return e
         },
         Array(a) {

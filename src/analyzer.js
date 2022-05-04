@@ -43,6 +43,10 @@ function checkIsInt(e) {
     checkType(e, [PrototypeObj.integer], "a integer")
 }
 
+function checkIsString(e) {
+    checkType(e, [PrototypeObj.string], "a integer")
+}
+
 function checkIsAType(e) {
     check(e instanceof PrototypeObj, "Type expected")
 }
@@ -103,12 +107,14 @@ function checkInFunction(context) {
     check(context.function, "Return can only appear in a function")
 }
 
-function checkElementsAllOfSameType(list) {
-    check(
-        list.slice(1).every((e) => e.prototype == list[0].prototype),
-        "Elements in list not all of same type",
-        list
-    )
+function checkElementsAllOfSameType(list, DNEPassThrough=false) {
+    if (!DNEPassThrough) {
+        check(
+            list.slice(1).every((e) => e.prototype == list[0].prototype),
+            "Elements in list not all of same type",
+            list
+        )
+    } 
 }
 
 function checkKeyValuesAllOfSameType(map) {
@@ -216,6 +222,7 @@ class Context {
     VariableDec(V) {
         //console.log(V)
         this.analyze(V.expression)
+        //console.log(V)
         checkVarDeclaration(V.id.lexeme, this)
         V.id.value = new VariableObj(V.prototype, V.id)
         this.add(V.id.lexeme, V.id.value)
@@ -352,12 +359,13 @@ class Context {
     }
     ListDec(L) {
         checkVarDeclaration(L.id.lexeme, this)
-        L.id.value = new VariableObj(L.prototype, L.id.lexeme)
+        L.id.value = new VariableObj(L.prototype, L.id)
         this.add(L.id.lexeme, L.id.value)
         //console.log("Before: ", L.list)
         this.analyze(L.list)
         //console.log("After: ", L.list)
-        checkElementsAllOfSameType(L.list)
+        if(L.prototype == "||DNE||") checkElementsAllOfSameType(L.list, true)
+        else checkElementsAllOfSameType(L.list)
         L.prototype = new ListPrototypeObj(L.prototype)
         checkIsSameType(
             L.prototype.basePrototype,
@@ -371,7 +379,7 @@ class Context {
     }
     MapDec(M) {
         checkVarDeclaration(M.id.lexeme, this)
-        M.id.value = new VariableObj(M.prototype, M.id.lexeme)
+        M.id.value = new VariableObj(M.prototype, M.id)
         this.add(M.id.lexeme, M.id.value)
         this.analyze(M.map)
         checkKeyValuesAllOfSameType(M.map)
@@ -561,7 +569,7 @@ class Context {
         if (T.category === "STR")
             [T.value, T.prototype] = [T.lexeme, PrototypeObj.string]
         if (T.category === "DNE")
-            [T.value, T.prototype] = [T.lexeme, PrototypeObj.doesNotExist]
+            [T.value, T.prototype] = [T.lexeme == "none" ? null: T.lexeme == "all" ? null : T.lexeme, PrototypeObj.doesNotExist]
         if (T.category === "BOOL")
             [T.value, T.prototype] = [T.lexeme === "true", PrototypeObj.boolean]
     }
