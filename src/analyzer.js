@@ -124,31 +124,11 @@ function checkKeyValuesAllOfSameType(map) {
         map
     )
 }
-/*
-function checkArgumentsMatch(args, targetTypes) {
-    check(
-      targetTypes.length === args.length,
-      `${targetTypes.length} argument(s) required but ${args.length} passed`
-    )
-    targetTypes.forEach((type, i) => checkAssignable(args[i], { toType: type }))
-  }
-  
-  function checkFunctionCallArguments(args, calleeType) {
-    checkArgumentsMatch(args, calleeType.paramTypes)
-  }
-  
-  function checkConstructorArguments(args, structType) {
-    const fieldTypes = structType.fields.map(f => f.type)
-    ch
-*/
+
 function checkIsReturnable(eType, cType) {
     checkIsAssignable(eType, cType)
 }
-/*
-function checkSomethingToReturn(f) {
 
-}
-*/
 function checkFunctionArguments(args, calleeType) {}
 
 function checkMethodArguments(args, calleeType) {}
@@ -158,7 +138,7 @@ function checkConstructorArguments(args, objectType) {}
 function checkIsIncrementStatement(s) {
     let increments = false
     increments = ["<++", "<--", "<**", "<//", "<%%"].includes(s?.assignment)
-    check(increments, "Not an Incrementing assignment statement", s) //check later for true false thing being wrong (!increments)
+    check(increments, "Not an Incrementing assignment statement", s)
 }
 
 class Context {
@@ -436,10 +416,10 @@ class Context {
         checkIsCallable(callee)
         this.analyze(C.args)
         if (callee.constructor === PrototypeObj) {
-            checkConstructorArguments(C.args, this.lookup(C.id.lexeme)) //sacoajvioac
+            checkConstructorArguments(C.args, this.lookup(C.id.lexeme))
             C.prototype = callee.prototype
         } else {
-            checkFunctionArguments(C.args, this.lookup(C.id.lexeme)) //coajicofacda
+            checkFunctionArguments(C.args, this.lookup(C.id.lexeme))
             C.prototype = callee.prototype
         }
     }
