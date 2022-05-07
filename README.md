@@ -26,11 +26,9 @@ Disclaimer: There are no single line comments in Plumb, the default comment is m
 |`Pipelines`|Used to specify the next block for holding pipes|
 |`return`|Used to specify when a function has reached a terminal state in its operation and what value to receive from it in a call|
 |`if`|Used to specify the next block with a conditional|
-|`else`|Used after an `if` specified block, `else` is used to specify the next block as the previous `if`'s false condition path|
 |`for`|Used to specify how many finite loops happen over a specified block|
 |`while`|Used to specify a halt condition over a specified block with an unknown number of loops|
 |`print`|Used to output to the command line|
-|`OP`|Used for overloading operator functionality into prototypes|
 |`INPUT`|Used to represent commandline arguments, as a plumb list, in the `Pipelines` block|
 |`DNE`|Type used to represent no, or any, type|
 |`BOOL`|Type used to represent booleans|
@@ -86,8 +84,6 @@ Disclaimer: There are no single line comments in Plumb, the default comment is m
 |Assignment by Multiplication|`<**`|Integers, Rationals, String|10| \| |
 |Assignment by Division|`<//`|Integers, Rationals|10| \| |
 |Assignment by Modulus|`<%%`|Integers, Rationals|10| \| |
-
-Note: Prototypes can use the operator (`OP`) key word to adapt functionality
 
 ### Pipeline Operators
 |Operator|Syntax|Description|

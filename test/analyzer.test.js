@@ -202,13 +202,25 @@ const semanticErrors = [
 // nodes that get rewritten as well as those that are just "passed through"
 // by the analyzer. For now, we're just testing the various rewrites only.
 
+/*
+const testSource = `
+Definitions{
+            INT FUNC next(INT x) {
+                return x + 1
+            }
+            next(1)
+        }
+`
+*/
+
 describe("The analyzer", () => {
+  //console.log(analyze(ast(testSource)))
+  //console.log(optimize(analyze(ast(testSource))))
+  
   for (const [scenario, source] of semanticChecks) {
     it(`recognizes ${scenario}`, () => {
-      console.log(ast(source))
       let analyzedAst = analyze(ast(source))
       assert.ok(analyzedAst)
-      console.log(analyzedAst)
     })
   }
   for (const [scenario, source, errorMessagePattern] of semanticErrors) {

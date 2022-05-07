@@ -158,7 +158,7 @@ function checkConstructorArguments(args, objectType) {}
 function checkIsIncrementStatement(s) {
     let increments = false
     increments = ["<++", "<--", "<**", "<//", "<%%"].includes(s?.assignment)
-    check(!increments, "Not an Incrementing assignment statement", s) //check later for true false thing being wrong (!increments)
+    check(increments, "Not an Incrementing assignment statement", s) //check later for true false thing being wrong (!increments)
 }
 
 class Context {
@@ -243,7 +243,7 @@ class Context {
                 F.id,
                 F.parameters
             )
-            this.prototype.constructorFunc = constructorFunction
+            this.prototype.constructorFunc = F
             F.id.value = constructorFunction
             //console.log(F)
             checkIsAType(F.prototype)
@@ -311,10 +311,16 @@ class Context {
         checkAttributeDeclaration(A.id.lexeme, this)
         A.id.value = new AttributeObj(A.prototype, A.id)
         this.add(A.id.lexeme, A.id)
-        this.prototype.attributes.push(A.id.value)
+        this.prototype.attributes.push(A)
     }
     MethodDec(M) {
-        if (M.prototype) this.analyze(M.prototype)
+        M.prototype = [
+            PrototypeObj.integer,
+            PrototypeObj.string,
+            PrototypeObj.boolean,
+            PrototypeObj.doesNotExist,
+            PrototypeObj.rational,
+        ].filter((type) => type.id == M.prototype)[0]
         M.id.value = new MethodObj(M.prototype, M.id, M.parameters)
         checkMethodDeclaration(M.id.lexeme, this)
         checkIsAType(M.prototype)
@@ -323,8 +329,9 @@ class Context {
             function: M.id.value,
         })
         childContext.analyze(M.id.value.parameters)
-        this.add(M.id.lexeme, M.id.value)
+        this.add(M.id.lexeme, M.id)
         childContext.analyze(M.block)
+        this.prototype.methods.push(M)
     }
     IfStatement(I) {
         this.analyze(I.condition)
@@ -355,7 +362,7 @@ class Context {
         this.analyze(R.expression)
         //console.log(R, this)
         R.prototype = R.expression.prototype
-        checkIsReturnable(R.prototype.id, this.function.prototype.id)
+        checkIsReturnable(R.prototype?.id ?? R.prototype, this.function.prototype.id)
     }
     ListDec(L) {
         checkVarDeclaration(L.id.lexeme, this)
@@ -464,6 +471,7 @@ class Context {
         }
     }
     AccessExpression(A) {
+        console.log(A)
         this.analyze(A.object)
         checkAttributeDeclaration(A.attribute.lexeme, this)
         if (!(A.object.prototype instanceof PrototypeObj)) {
@@ -478,7 +486,7 @@ class Context {
         this.analyze(M.object)
         checkMethodDeclaration(M.method.lexeme, this)
         this.analyze(M.args)
-        //console.log(M)
+        console.log(this, M)
         checkMethodArguments(M.args, this.lookup(M.method.lexeme))
         M.method = this.lookup(M.method.lexeme)
         M.prototype = M.method.prototype
@@ -572,6 +580,8 @@ class Context {
             [T.value, T.prototype] = [T.lexeme == "none" ? null: T.lexeme == "all" ? null : T.lexeme, PrototypeObj.doesNotExist]
         if (T.category === "BOOL")
             [T.value, T.prototype] = [T.lexeme === "true", PrototypeObj.boolean]
+        if (T.category.toLowerCase() === "self") 
+            [T.value, T.prototype] = [this.prototype, this.prototype]
     }
     Array(a) {
         a.forEach((item) => this.analyze(item))

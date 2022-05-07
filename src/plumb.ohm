@@ -20,11 +20,11 @@ Plumb {
               | MapDec 
               | Exp7
     VariableDec = (prototype | id) id assignment Expression
-    Assignment = (self".")? id assignment Expression
+    Assignment = self? "."? id assignment Expression
     FunctionDec = (prototype | id) function id "(" ListOf<TypeParameterPairDec, ","> ")" Block
     TypeParameterPairDec = (prototype|id) id
     PrototypeDec = "PROTO" id Block
-    AttributeDec = "ATR" (prototype | id) id (assignment Expression)?
+    AttributeDec = "ATR" (prototype | id) id assignment? Expression?
     MethodDec = "ATR" (prototype | id) function id "(" ListOf<TypeParameterPairDec, ","> ")" Block
     IfStatement = if "(" Expression ")" Block
     WhileStatement = while "(" Expression ")" Block

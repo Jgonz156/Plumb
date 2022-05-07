@@ -30,7 +30,7 @@ const fixtures = [
         `,
         expected: dedent`
             let x_1 = 1
-            x_1 <== 2
+            x_1 = 2
         `
     },
     {
@@ -43,7 +43,7 @@ const fixtures = [
         }
         `,
         expected: dedent`
-            function next_1(x_2){
+            function next_1(x_2) {
                 return x_2 + 1
             }
         `
@@ -61,10 +61,10 @@ const fixtures = [
         }
         `,
         expected: dedent`
-            class CUBE_1{
-                #l_1
-                constructor(x_2){
-                    this.l_1 = x_2
+            class CUBE_1 {
+                #l_2
+                constructor(x_3) {
+                    this.l_2 = x_3
                 }
             }
         `
@@ -82,7 +82,7 @@ const fixtures = [
         expected: dedent`
             let x_1 = true
             if(x_1){
-                x = false
+                x_1 = false
             }
         `
     },
@@ -99,7 +99,7 @@ const fixtures = [
         expected: dedent`
             let x_1 = true
             while(x_1){
-                x = false
+                x_1 = false
             }
         `
     },
@@ -124,18 +124,90 @@ const fixtures = [
         name: "Basic Call",
         source: `
         Definitions{
-            INT FUNC next(INT x){
+            INT FUNC next(INT x) {
                 return x + 1
             }
+            next(1)
         }
         `,
         expected: dedent`
-            function next_1(x_2){
+            function next_1(x_2) {
                 return x_2 + 1
             }
             next_1(1)
         `
     },
+    {
+        name: "Basic Index Expression",
+        source: `
+        Definitions{
+            ||STR|| x <== ||"bob"||
+            STR y <== x[0]
+        }
+        `,
+        expected: dedent`
+            let x_1 = ["bob"]
+            let y_2 = x_1[0]
+        `
+    },
+    {
+        name: "Basic Access Expression",
+        source: `
+        Definitions{
+            PROTO CUBE{
+                ATR INT l
+                CUBE FUNC CUBE(INT x){
+                    self.l <== x
+                }
+            }
+            CUBE a <== CUBE(1)
+            INT b <== a.l
+        }
+        `,
+        expected: dedent`
+        class CUBE_1 {
+            #l_2
+            constructor(x_3) {
+                this.l_2 = x_3
+            }
+        }
+        let a_4 = new CUBE_1(1)
+        let b_5 = a_4.l_2
+        `
+    },
+    /*
+    {
+        name: "Basic Method Expression",
+        source: `
+        Definitions{
+            PROTO CUBE{
+                ATR INT l
+                CUBE FUNC CUBE(INT x){
+                    self.l <== x
+                }
+                ATR INT FUNC getLength(){
+                    return self.l
+                }
+            }
+            CUBE a <== CUBE(1)
+            INT b <== a.getLength()
+        }
+        `,
+        expected: dedent`
+        class CUBE_1 {
+            #l_2
+            constructor(x_3) {
+                this.l_2 = x_3
+            }
+            getLength_4(){
+                return this.l_2
+            }
+        }
+        let a_4 = new CUBE_1(1)
+        let b_5 = a_4.getLength_4()
+        `
+    },
+    */
     {
         name: "Basic Variable Declerations",
         source: `
@@ -198,21 +270,6 @@ const fixtures = [
         source: `
         Definitions{
             INT x <== 1
-            INT y <== 1
-            INT z <== x + y
-        }
-        `,
-        expected: dedent`
-            let x_1 = 1
-            let y_2 = 1
-            let z_3 = x_1 + y_2
-        `
-    },
-    {
-        name: "Complicated Variable Declerations",
-        source: `
-        Definitions{
-            DNE x <== 1
             INT y <== 1
             INT z <== x + y
         }

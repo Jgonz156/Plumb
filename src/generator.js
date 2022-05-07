@@ -1,3 +1,4 @@
+import { PrototypeObj } from "./core.js"
 import * as stdlib from "./stdlib.js"
 
 export default function generate(program) {
@@ -35,6 +36,8 @@ export default function generate(program) {
 
     const PtoJSOperators = (plumbOp) => opMap?.get(plumbOp) ?? plumbOp
 
+    let constructorFunction = false
+
     const generators = {
         Program(p) {
             if (p.imports) gen(p.imports)
@@ -48,7 +51,8 @@ export default function generate(program) {
             gen(d.block)
         },
         VariableDec(v) {
-            output.push(`let ${gen(v.id)} = ${gen(v.expression)}`)
+            let expressionString = gen(v.expression)
+            output.push(`let ${gen(v.id)} = ${ expressionString != undefined ? expressionString : output.pop()}`)
         },
         VariableObj(v) {
             return targetName(v.id)
@@ -56,9 +60,9 @@ export default function generate(program) {
         Assignment(a) {
             if (a.self){
                 output.push(
-                    `this.${gen(a.id)} ${PtoJSOperators(a.assignment)} ${
+                    `this.${targetName(a.id)} ${PtoJSOperators(a.assignment)} ${gen(
                         a.expression
-                    }`
+                    )}`
                 )
                 }else{
                 output.push(
@@ -69,25 +73,36 @@ export default function generate(program) {
                     }
         },
         FunctionDec(f) {
+            if(!constructorFunction){
             output.push(
                 `function ${gen(f.id)}(${gen(f.parameters).join(", ")}) {`
             )
             gen(f.block)
             output.push(`}`)
+        } else {
+            constructorFunction = false
+        output.push(
+            `constructor(${gen(f.parameters).join(", ")}) {`
+        )
+        gen(f.block)
+        output.push(`}`)
+        }
         },
         FunctionObj(f) {
-            return targetName(f)
+            return targetName(f.id)
         },
         TypeParameterPairDec(p) {
-            output.push(`${gen(p.id)}`)
+            return `${gen(p.id)}`
         },
         TypeParameterPairObj(p) {
-            return targetName(p)
+            return targetName(p.id)
         },
         PrototypeDec(p) {
             output.push(`class ${gen(p.id)} {`)
-            gen(p.attributes)
-            gen(p.methods)
+            gen(p.id.attributes)
+            constructorFunction = true
+            gen(p.id.constructorFunc)
+            gen(p.id.methods)
             output.push(`}`)
         },
         PrototypeObj(p) {
@@ -95,13 +110,13 @@ export default function generate(program) {
         },
         AttributeDec(a) {
             output.push(
-                `#${gen(a.id)} ${PtoJSOperators(a.assignment)} ${gen(
+                `#${gen(a.id)}${PtoJSOperators(a.assignment)}${gen(
                     a.expression
                 )}`
             )
         },
         AttributeObj(a) {
-            return targetName(a)
+            return targetName(a.id)
         },
         MethodDec(m) {
             output.push(`${gen(m.id)}(${gen(m.parameters).join(", ")}){`)
@@ -122,16 +137,18 @@ export default function generate(program) {
             output.push(`}`)
         },
         ForStatement(f) {
+            gen(f.iteration)
+            gen(f.assignment)
             output.push(
-                `for( ${gen(f.assignment)}; ${gen(
-                    f.condition.value
-                )}; ${gen(f.iteration)}){`
+                `for(${output.pop()}; ${gen(
+                    f.condition
+                )}; ${output.pop()}){`
             )
             gen(f.block)
             output.push(`}`)
         },
         ReturnStatement(r) {
-            output.push(`return ${r.expression}`)
+            output.push(`return ${gen(r.expression)}`)
         },
         ListDec(l) {
             output.push(
@@ -171,10 +188,15 @@ export default function generate(program) {
             return `${gen(i.object)}[${gen(i.index)}]`
         },
         Call(c) {
-            return `${gen(c.id)}(${gen(c.args).join(", ")})`
+            console.log(c)
+            console.log(gen(c.id))
+            let objectString = gen(c.id) ? gen(c.id) : output.pop()
+            if (c.id instanceof PrototypeObj) output.push(`new ${objectString}(${gen(c.args).join(", ")})`)
+            else output.push(`${objectString}(${gen(c.args).join(", ")})`)
         },
         AccessExpression(a) {
-            return `${gen(a.object)}.${gen(a.attribute)}`
+            let attributeString = gen(a.attribute)
+            return `${gen(a.object)}.${attributeString ? attributeString.substring(1) : output.pop().substring(1)}`
         },
         MethodExpression(m) {
             return `${gen(m.object)}.${gen(m.method)}(${gen(

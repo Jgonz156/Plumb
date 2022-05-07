@@ -28,15 +28,15 @@ const astBuilder = plumbGrammar.createSemantics().addOperation("ast", {
         return new core.VariableDec(
             prototype.sourceString,
             id.ast(),
-            assignment.ast(),
+            assignment.sourceString,
             expression.ast()
         )
     },
     Assignment(self, _dot, id, assignment, expression) {
         return new core.Assignment(
-            self.sourceString[0] ?? null,
+            self.sourceString != '' ? self.sourceString: null,
             id.ast(),
-            assignment.ast(),
+            assignment.sourceString,
             expression.ast()
         )
     },
@@ -58,8 +58,8 @@ const astBuilder = plumbGrammar.createSemantics().addOperation("ast", {
         return new core.AttributeDec(
             prototype.sourceString,
             id.ast(),
-            assignment.ast(),
-            expression.ast()
+            assignment.sourceString ?? null,
+            expression.ast() ?? null
         )
     },
     MethodDec(_atr, prototype, _func, id, _lp, parameters, _rp, block) {
