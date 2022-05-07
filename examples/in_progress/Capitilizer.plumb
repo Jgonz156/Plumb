@@ -7,5 +7,5 @@ Definitions {
     }
 }
 Pipelines {
-    INPUT --<( -(STR)-> capitilize --> print
+    INPUT --<( a -(STR)-> capitilize --> print
 }

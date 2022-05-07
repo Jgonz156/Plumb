@@ -1,0 +1,13 @@
+Definitions{
+    ||INT|| x <== ||1, 2||
+    ||BOOL|| y <== ||true, false||
+    ||DNE|| z <== ||none, 1, 1.1, "string"||
+    <<INT>> a <== << "car":12, "wheels":4 >>
+    <<STR>> b <== << "car":"twelve", "wheels":"four" >>
+    <<BOOL>> c <== << "car":true, "wheels":true >>
+    INT d <== 1
+    INT e <== 1
+    INT f <== d + e
+    ||DNE|| g <== ||x,y,z,a,b,c,d,e,f||
+    print(g)
+}

@@ -202,21 +202,31 @@ const semanticErrors = [
 // nodes that get rewritten as well as those that are just "passed through"
 // by the analyzer. For now, we're just testing the various rewrites only.
 
-/*
+
 const testSource = `
-Definitions{
-            INT FUNC next(INT x) {
-                return x + 1
-            }
-            next(1)
-        }
+:: 
+This program takes an input off the commandline, casts it to an INT type,
+and denominates it into the smallest number of US coins.
+::
+Definitions {
+    DNE FUNC denominate(INT total) {
+        INT current_total <== total
+        INT quarters <== current_total % 25
+        current_total <-- 25 * quarters
+        INT dimes <== current_total % 10
+        current_total <-- 10 * dimes
+        INT nickels <== total % 5
+        current_total <-- 5 * nickels
+        return (INT)||quarters, dimes, nickels, current_total||
+    }
+    ||STR|| input <== ||"123"||
+}
+Pipelines {
+    input -0-> a -(INT)-> denominate --> print
+}
 `
-*/
 
 describe("The analyzer", () => {
-  //console.log(analyze(ast(testSource)))
-  //console.log(optimize(analyze(ast(testSource))))
-  
   for (const [scenario, source] of semanticChecks) {
     it(`recognizes ${scenario}`, () => {
       let analyzedAst = analyze(ast(source))

@@ -291,7 +291,6 @@ const expected7 = `   1 | Program imports=null definition=#2 pipeline=null
   19 | Call id=(Id,"print") args=[(STR,""This will never print!"")]`
 
 describe("The AST generator", () => {
-  //console.log(ast(source8))
   it("produces a correct AST", () => {
     assert.deepStrictEqual(util.format(ast(source)), expected)
   })

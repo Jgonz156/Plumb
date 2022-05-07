@@ -62,7 +62,7 @@ function checkIsSameType(t1, t2) {
 
 function checkIsAssignable(eType, cType) {
     check(
-        eType === "DNE" || eType == cType,
+        eType === "DNE" || cType == "DNE" || eType == cType || cType == PrototypeObj.doesNotExist || eType == PrototypeObj.doesNotExist,
         `Cannot assign a ${eType} to a ${cType}`
     )
 }
@@ -220,15 +220,12 @@ class Context {
         this.analyze(D.block)
     }
     VariableDec(V) {
-        //console.log(V)
         this.analyze(V.expression)
-        //console.log(V)
         checkVarDeclaration(V.id.lexeme, this)
         V.id.value = new VariableObj(V.prototype, V.id)
         this.add(V.id.lexeme, V.id.value)
     }
     Assignment(A) {
-        //add if that changes based on if self is there
         this.analyze(A.expression)
         this.analyze(A.id)
         checkIsAssignable()
@@ -236,16 +233,14 @@ class Context {
     FunctionDec(F) {
         if (!this.hasConstructor && this.prototype) {
             this.hasConstructor = true
-            //console.log(this)
             F.prototype = this.prototype
             let constructorFunction = new FunctionObj(
-                F.prototype, //check later for source of odd prototypes
+                F.prototype,
                 F.id,
                 F.parameters
             )
             this.prototype.constructorFunc = F
             F.id.value = constructorFunction
-            //console.log(F)
             checkIsAType(F.prototype)
             const childContext = this.newChildContext({
                 inLoop: false,
@@ -255,7 +250,6 @@ class Context {
             this.add(F.id.lexeme, F.id.value)
             childContext.analyze(F.block)
         } else {
-            //console.log(F)
             F.prototype = [
                 PrototypeObj.integer,
                 PrototypeObj.string,
@@ -263,9 +257,8 @@ class Context {
                 PrototypeObj.doesNotExist,
                 PrototypeObj.rational,
             ].filter((type) => type.id == F.prototype)[0]
-            //console.log(F)
             F.id.value = new FunctionObj(
-                F.prototype, //check later for source of odd prototypes
+                F.prototype,
                 F.id,
                 F.parameters
             )
@@ -281,7 +274,6 @@ class Context {
         }
     }
     TypeParameterPairDec(P) {
-        //console.log(P)
         P.prototype = [
             PrototypeObj.integer,
             PrototypeObj.string,
@@ -289,9 +281,7 @@ class Context {
             PrototypeObj.doesNotExist,
             PrototypeObj.rational,
         ].filter((type) => type.id == P.prototype)[0]
-        //P.id = new VariableObj(P.prototype, P.id)
         P.id.value = new TypeParameterPairObj(P.prototype, P.id)
-        //console.log(P)
         this.add(P.id.lexeme, P.id.value)
     }
     PrototypeDec(P) {
@@ -303,7 +293,6 @@ class Context {
             hasConstructor: false,
         })
         this.add(P.id.lexeme, P.id.value)
-        //console.log("After adding the new prototype",this)
         childContext.analyze(P.block)
     }
     AttributeDec(A) {
@@ -335,7 +324,6 @@ class Context {
     }
     IfStatement(I) {
         this.analyze(I.condition)
-        //console.log(I)
         checkIsBool(I.condition)
         this.newChildContext().analyze(I.block)
     }
@@ -348,9 +336,6 @@ class Context {
         const bodyContext = this.newChildContext({ inLoop: true })
         bodyContext.analyze(F.assignment)
         bodyContext.analyze(F.condition)
-        //console.log(F)
-        //console.log(F.condition)
-        //console.log(F.condition.prototype)
         checkIsBool(F.condition)
         bodyContext.analyze(F.iteration)
         checkIsIncrementStatement(F.iteration)
@@ -358,9 +343,7 @@ class Context {
     }
     ReturnStatement(R) {
         checkInFunction(this)
-        //checkSomethingToReturn(R.expression)
         this.analyze(R.expression)
-        //console.log(R, this)
         R.prototype = R.expression.prototype
         checkIsReturnable(R.prototype?.id ?? R.prototype, this.function.prototype.id)
     }
@@ -368,9 +351,7 @@ class Context {
         checkVarDeclaration(L.id.lexeme, this)
         L.id.value = new VariableObj(L.prototype, L.id)
         this.add(L.id.lexeme, L.id.value)
-        //console.log("Before: ", L.list)
         this.analyze(L.list)
-        //console.log("After: ", L.list)
         if(L.prototype == "||DNE||") checkElementsAllOfSameType(L.list, true)
         else checkElementsAllOfSameType(L.list)
         L.prototype = new ListPrototypeObj(L.prototype)
@@ -416,16 +397,12 @@ class Context {
             checkIsSameType(B.left, B.right)
             B.prototype = PrototypeObj.boolean
         } else if (["<=", ">=", "<", ">"].includes(B.op)) {
-            //console.log(B)
             checkIsNumber(B.left)
             checkIsSameType(B.left, B.right)
-            //checknumberorstring
             B.prototype = PrototypeObj.boolean
         } else if (["+"].includes(B.op)) {
-            //console.log(B)
             checkIsNumber(B.left)
             checkIsSameType(B.left, B.right)
-            //checknumberorstring
             B.prototype = B.left.prototype
         } else if (["-", "*", "/", "%", "^"].includes(B.op)) {
             checkIsNumber(B.left)
@@ -448,7 +425,6 @@ class Context {
         this.analyze(I.index)
         I.prototype = I.object.prototype
         if (I.object.constructor === MapPrototypeObj) {
-            // CHECK LATER MIGHT CAUSE PROBS
             checkIsString(I.index)
         } else if (I.object.constructor === ListPrototypeObj) {
             checkIsInt(I.index)
@@ -456,10 +432,7 @@ class Context {
     }
     Call(C) {
         this.analyze(C.id)
-        //console.log(C)
         const callee = C.id?.value ?? C.id
-        //console.log(this)
-        //console.log("callee", callee)
         checkIsCallable(callee)
         this.analyze(C.args)
         if (callee.constructor === PrototypeObj) {
@@ -471,7 +444,6 @@ class Context {
         }
     }
     AccessExpression(A) {
-        console.log(A)
         this.analyze(A.object)
         checkAttributeDeclaration(A.attribute.lexeme, this)
         if (!(A.object.prototype instanceof PrototypeObj)) {
@@ -486,7 +458,6 @@ class Context {
         this.analyze(M.object)
         checkMethodDeclaration(M.method.lexeme, this)
         this.analyze(M.args)
-        console.log(this, M)
         checkMethodArguments(M.args, this.lookup(M.method.lexeme))
         M.method = this.lookup(M.method.lexeme)
         M.prototype = M.method.prototype
@@ -525,7 +496,7 @@ class Context {
             //leave late for ast
             if (toApplyString != "") P.inputs = toApplyString
         } else if (/^-((.)-)+>$/.test(P.op)) {
-            regResult = /^-((?:.-)+)>$/.exec(P.op)
+            let regResult = /^-((?:.-)+)>$/.exec(P.op)
             let attributesDrained = regResult[1]
                 .substring(0, regResult[1].length - 1)
                 .split("-")
@@ -546,7 +517,6 @@ class Context {
         } else if (/^-\(.+?\)->$/.test(P.op)) {
             regResult = /^-\((.+?)\)->$/.exec(P.op)[1]
             let prototypeToCast = this.lookup(regResult)
-            // console.log(prototypeToCast)
             P.value = new PipeObj()
         }
         this.prevPipe = P
@@ -558,7 +528,6 @@ class Context {
             if (
                 ["INT", "RAT", "STR", "DNE", "BOOL"].includes(T.value.prototype)
             ) {
-                //console.log("TokenContextWhenAssigningPrototype",this)
                 T.prototype = [
                     PrototypeObj.integer,
                     PrototypeObj.string,

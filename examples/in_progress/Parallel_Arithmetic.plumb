@@ -9,5 +9,5 @@ Definitions {
     }
 }
 Pipelines {
-    to_be_divided --<( --> divide_by_3 --> print
+    to_be_divided --<( a --> divide_by_3 --> print
 }

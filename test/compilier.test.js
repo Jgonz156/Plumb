@@ -27,9 +27,9 @@ describe("The compiler", () => {
     assert(util.format(compiled).startsWith("   1 | Program"))
     done()
   })
-  //it("generates js code when given the js option", done => {
-  //  const compiled = compile(sampleProgram, "js")
-  //  assert(util.format(compiled).startsWith("console.log(0)"))
-  //  done()
-  //})
+  it("generates js code when given the js option", done => {
+    const compiled = compile(sampleProgram, "js")
+    assert(util.format(compiled).startsWith(""))
+    done()
+  })
 })

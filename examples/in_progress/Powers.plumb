@@ -11,5 +11,5 @@ Definitions {
     }
 }
 Pipelines {
-    INPUT, INPUT -1-2-> -(INT)-> powers
+    INPUT, INPUT -1-2-> a -(INT)-> powers
 }

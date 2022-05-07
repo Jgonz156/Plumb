@@ -1,0 +1,6 @@
+Definitions{
+    INT FUNC next(INT x) {
+        return x + 1
+    }
+    next(1)
+}

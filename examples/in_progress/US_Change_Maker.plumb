@@ -1,9 +1,9 @@
 :: 
-This program takes an input off the commandline, casts it to an INT type,
+This program takes an input, casts it to an INT type,
 and denominates it into the smallest number of US coins.
 ::
 Definitions {
-    ||INT|| FUNC denominate(INT total) {
+    DNE FUNC denominate(INT total) {
         INT current_total <== total
         INT quarters <== current_total % 25
         current_total <-- 25 * quarters
@@ -11,9 +11,10 @@ Definitions {
         current_total <-- 10 * dimes
         INT nickels <== total % 5
         current_total <-- 5 * nickels
-        return ||quarters, dimes, nickels, current_total||
+        return (INT)||quarters, dimes, nickels, current_total||
     }
+    ||STR|| input <== ||"123"||
 }
 Pipelines {
-    INPUT -1-> -(INT)-> denominate --> print
+    input -0-> a -(INT)-> denominate --> print
 }

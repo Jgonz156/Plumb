@@ -65,10 +65,10 @@ Disclaimer: There are no single line comments in Plumb, the default comment is m
 |Negation|`!`|Boolean|2|R to L|
 |Negation|`-`|Integers, Rationals|2| \| |
 |Exponentiation|`^`|Integers, Rationals|3| \| |
-|Multiplication|`*`|Integers, Rationals, String|4| L to R |
+|Multiplication|`*`|Integers, Rationals|4| L to R |
 |Division|`/`|Integers, Rationals|4| \| |
 |Modulus|`%`|Integers, Rationals|4| \| |
-|Addition|`+`|Integers, Rationals, String|5| \| |
+|Addition|`+`|Integers, Rationals|5| \| |
 |Subtraction|`-`|Integers, Rationals|5| \| |
 |Less Than|`<`|Integers, Rationals|6|None|
 |Less Than or equal|`<=`|Integers, Rationals|6| \| |
@@ -79,9 +79,9 @@ Disclaimer: There are no single line comments in Plumb, the default comment is m
 |Logical AND|`and`|Boolean|8| \| |
 |Logical OR|`or`|Boolean|9| \| |
 |Assignment by Expression|`<==`|Boolean, Integers, Rationals, String, Prototype Instance|10|R to L|
-|Assignment by Addition|`<++`|Integers, Rationals, String|10| \| |
+|Assignment by Addition|`<++`|Integers, Rationals|10| \| |
 |Assignment by Subtraction|`<--`|Integers, Rationals|10| \| |
-|Assignment by Multiplication|`<**`|Integers, Rationals, String|10| \| |
+|Assignment by Multiplication|`<**`|Integers, Rationals|10| \| |
 |Assignment by Division|`<//`|Integers, Rationals|10| \| |
 |Assignment by Modulus|`<%%`|Integers, Rationals|10| \| |
 

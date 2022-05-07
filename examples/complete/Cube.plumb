@@ -1,0 +1,10 @@
+Definitions{
+    PROTO CUBE{
+        ATR INT l
+        CUBE FUNC CUBE(INT x){
+            self.l <== x
+        }
+    }
+    CUBE a <== CUBE(1)
+    INT b <== a.l
+}

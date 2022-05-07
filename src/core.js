@@ -211,13 +211,7 @@ export class KeyValuePair {
         this.value = value
     }
 }
-/*
-export class Pair {
-    constructor(prototype, key, value){
 
-    }
-}
-*/
 export class Block {
     constructor(statements) {
         this.statements = statements
@@ -313,14 +307,11 @@ export function error(message, token) {
 Program.prototype[util.inspect.custom] = function () {
     const tags = new Map()
 
-    // Attach a unique integer tag to every node
     function tag(node) {
         if (tags.has(node) || typeof node !== "object" || node === null) return
         if (node.constructor === Token) {
-            // Tokens are not tagged themselves, but their values might be
             tag(node?.value)
         } else {
-            // Non-tokens are tagged
             tags.set(node, tags.size + 1)
             for (const child of Object.values(node)) {
                 Array.isArray(child) ? child.forEach(tag) : tag(child)

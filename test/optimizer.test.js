@@ -61,10 +61,7 @@ const tests = [
     ["optimizes in functions", intfunc(return1p1), intfunc(return2)],
     ["optimizes in index", index(x, onePlusTwo), index(x, 3)],
     ["optimizes in lists", array(0, onePlusTwo, 9), array(0, 3, 9)],
-    //["optimizes in calls", intfunc(return1p1), intfunc(return2)],
-    //[]
     ["optimizes in pipes", piper(onePlusTwo), piper(3)]
-    //["optimizes in multiple pipes", new core.Pipe([3, onePlusTwo], "-->", new core.Pipe()), ]
 ]
 
 describe("The optimizer", () => {

@@ -5,8 +5,7 @@ export default function generate(program) {
     const output = []
 
     const standardFunctions = new Map([
-        [stdlib.contents.print, (x) => `console.log(${x})`], //check later for garbage
-        //[stdlib.contents.print, x => `console.log(${x})`],
+        [stdlib.contents.print, (x) => `console.log(${x})`],
     ])
 
     const targetName = ((mapping) => {
@@ -188,8 +187,10 @@ export default function generate(program) {
             return `${gen(i.object)}[${gen(i.index)}]`
         },
         Call(c) {
-            console.log(c)
-            console.log(gen(c.id))
+            if (standardFunctions.has(c.id)) {
+                output.push(standardFunctions.get(c.id)(gen(c.args).join(", ")))
+                return []
+            }
             let objectString = gen(c.id) ? gen(c.id) : output.pop()
             if (c.id instanceof PrototypeObj) output.push(`new ${objectString}(${gen(c.args).join(", ")})`)
             else output.push(`${objectString}(${gen(c.args).join(", ")})`)
@@ -207,7 +208,8 @@ export default function generate(program) {
             gen(p.pipes)
         },
         Pipe(p) {
-            return `le pipes are not le done yet`
+            throw new Error("Generating Pipes is not implemented yet")
+            return `Generating pipes is not implemented yet`
         },
         Number(e) {
             return e
