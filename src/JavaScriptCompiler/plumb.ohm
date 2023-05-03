@@ -2,6 +2,7 @@ Plumb {
      Program = ("\n")* Import* ("\n")* Definitions? ("\n")* Pipelines? ("\n")* end
     Import = ("\n")* "import" string ("\n")*
     Definitions = definition Block
+    Block = "{" Statement* "}" ("\n")*
     Statement = ("\n")* Statement ("\n")* -- Newlines
     		  | VariableDec 
     		  | Assignment 
@@ -9,6 +10,7 @@ Plumb {
               | PrototypeDec 
               | AttributeDec 
               | MethodDec
+              | ConstructorDec
               | IfStatement 
               | WhileStatement 
               | ForStatement 
@@ -16,16 +18,15 @@ Plumb {
               | EmptyReturnStatement 
               | ContinueStatement
               | BreakStatement
-              | ListDec 
-              | MapDec 
               | Exp7
-    VariableDec = (prototype | id) id assignment Expression
-    Assignment = self? "."? id assignment Expression
-    FunctionDec = (prototype | id) function id "(" ListOf<TypeParameterPairDec, ","> ")" Block
-    TypeParameterPairDec = (prototype|id) id
-    PrototypeDec = "PROTO" id Block
-    AttributeDec = "ATR" (prototype | id) id assignment? Expression?
-    MethodDec = "ATR" (prototype | id) function id "(" ListOf<TypeParameterPairDec, ","> ")" Block
+    VariableDec = prototype id assignment Expression
+    Assignment = (self ".")? id assignment Expression
+    FunctionDec = prototype function id "(" ListOf<TypeParameterPairDec, ","> ")" Block
+    TypeParameterPairDec = prototype id
+    PrototypeDec = "PROTO" prototype Block
+    AttributeDec = "ATR" prototype id assignment? Expression?
+    MethodDec = "ATR" prototype function id "(" ListOf<TypeParameterPairDec, ","> ")" Block
+    ConstructorDec = prototype function prototype "(" ListOf<TypeParameterPairDec, ","> ")" Block
     IfStatement = if "(" Expression ")" Block
     WhileStatement = while "(" Expression ")" Block
     ForStatement = for "(" Statement ":" Expression ":" Statement ")" Block
@@ -33,12 +34,9 @@ Plumb {
     EmptyReturnStatement = return
     ContinueStatement = continue
     BreakStatement = break
-    ListDec = (prototype | id) id assignment "||" ListOf<Expression, ",">  "||"
-    ListLit = "(" (prototype | id) ")" "||" ListOf<Expression, ",">  "||"
-    MapDec = (prototype | id) id assignment "<<" ListOf<KeyValuePair, ","> ">>"
-    MapLit = "(" (prototype | id) ")" "<<" ListOf<KeyValuePair, ","> ">>"
-    KeyValuePair = Expression ":" Expression
-    Block = "{" Statement* "}" ("\n")*
+    ListLit = "#" prototype "#" "||" ListOf<Expression, ",">  "||"
+    MapLit = "#" prototype "#" "<<" ListOf<KeyValuePair, ","> ">>"
+    KeyValuePair = string ":" Expression
     Expression = Exp1 "or" Exp1 -- BooleanOR
     	       | Exp1
     Exp1 = Exp2 "and" Exp2 -- BooleanAND
@@ -65,11 +63,11 @@ Plumb {
          | string
          | self 
          | doesnotexist
+         | prototype
          | id 
          | ListLit
          | MapLit
          | "(" Expression ")" -- Expression
-         | prototype
     string = "\"" char* "\""
     char = ~keyword ~"::" ~"\"" any
     continue = "continue" ~idchar
@@ -90,13 +88,13 @@ Plumb {
     false = "false" ~idchar
     op = "OP" ~idchar
     assignment = "<==" | "<++" | "<--" | "<**" | "<//" | "<%%"
-    prototype = "INT" | "STR" | "RAT" | "BOOL" | "DNE" 
+    prototype = upper+
     		  | "||" prototype "||" -- ListProto
               | "<<" prototype ">>" -- MapProto
-    id = ~keyword letter idchar*
+    id = ~keyword (lower|unicodeLtmo) idchar*
     idchar = letter | digit | "_"
     keyword = continue | break | self | none | all | function | while | for | if | return | prototype | true | false | definition | pipeline | op
-    rational = digit+ ("." digit+) (("E" | "e") ("+" | "-")? digit+)?
+    rational = digit+ ("." digit+)? (("E" | "e") ("+" | "-")? digit+)?
     integer = digit+ 
     space := ( " " | "\t" | "\r" ) | "::" (~"::" any)* "::" -- Comment
     Pipelines = pipeline "{" PipeDec* "}"
